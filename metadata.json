@@ -1,0 +1,6 @@
+{
+  "name": "PillPulse - Minimal Medicine & Routine Reminder",
+  "description": "A mobile-first medicine reminder and cascading routine companion with melodic sound alarms, custom interval stacks, and adherence tracking.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
