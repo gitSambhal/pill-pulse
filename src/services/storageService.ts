@@ -19,6 +19,7 @@ const STORAGE_KEYS = {
   SETTINGS: 'pillpulse_settings_v1',
   HISTORY: 'pillpulse_history_v1',
   THEME: 'pillpulse_theme_v1',
+  THEME_COLOR: 'pillpulse_accent_color_v1',
 };
 
 export const DEFAULT_SLOT_TIMES: SlotTimeSettings = {
@@ -36,6 +37,7 @@ const DEFAULT_SETTINGS: NotificationSettings = {
   browserNotifications: false,
   vibrateEnabled: true,
   slotTimes: DEFAULT_SLOT_TIMES,
+  themeColor: 'blue',
 };
 
 // Seed initial medicines

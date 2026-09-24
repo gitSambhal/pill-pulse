@@ -3,11 +3,75 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @layer base {
+  :root {
+    --google-font: "Plus Jakarta Sans", Roboto, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --app-accent: #1A73E8;
+    --app-accent-hover: #1557B0;
+    --app-accent-subtle: #E8F0FE;
+    --app-accent-ring: rgba(26, 115, 232, 0.25);
+    
+    /* Google Material 3 Colors */
+    --google-blue: #1A73E8;
+    --google-red: #EA4335;
+    --google-yellow: #FBBC04;
+    --google-green: #34A853;
+    
+    /* Google Light Surfaces */
+    --google-surface: #FFFFFF;
+    --google-surface-dim: #F8FAFD;
+    --google-surface-container: #F0F4F9;
+    --google-surface-container-high: #E9EEF6;
+    --google-border: #E0E3E7;
+    --google-border-subtle: #F1F3F4;
+    --google-text-primary: #1F1F1F;
+    --google-text-secondary: #444746;
+  }
+
   html {
     color-scheme: light dark;
+    font-family: var(--google-font);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
   
   body {
-    @apply bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-100 min-h-screen antialiased selection:bg-teal-500 selection:text-white;
+    background-color: #F8FAFD;
+    color: #1F1F1F;
+    font-family: var(--google-font);
+    min-height: 100vh;
+    letter-spacing: -0.01em;
+  }
+
+  .dark body, html.dark body {
+    background-color: #131314;
+    color: #E3E3E3;
+  }
+
+  /* Google Material Scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #DADCE0;
+    border-radius: 9999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #BDC1C6;
+  }
+  .dark ::-webkit-scrollbar-thumb {
+    background: #3C4043;
+  }
+  .dark ::-webkit-scrollbar-thumb:hover {
+    background: #5F6368;
+  }
+
+  /* Prevent text size adjustment & touch tap highlight */
+  * {
+    -webkit-tap-highlight-color: transparent;
   }
 }
+

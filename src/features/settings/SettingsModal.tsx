@@ -1,5 +1,5 @@
 /**
- * PillPulse - Settings & Sound Customization Modal
+ * PillPulse - Google Health Preferences & Sounds Modal
  * Developer: Suhail Akhtar (https://suhail.top)
  */
 
@@ -13,20 +13,20 @@ import {
   Check,
   Vibrate,
   RotateCcw,
-  Music,
-  Sliders,
-  Sparkles,
   Clock,
   Sunrise,
   Sun,
   Sunset,
   Moon,
 } from 'lucide-react';
-import { NotificationSettings, SoundPreset, SlotTimeSettings } from '../../types';
+import { NotificationSettings, SoundPreset, SlotTimeSettings, ThemeColor } from '../../types';
 import { audioService } from '../../services/audioService';
 import { notificationService } from '../../services/notificationService';
 import { formatTime12h } from '../../utils';
 import { DEFAULT_SLOT_TIMES } from '../../services/storageService';
+import { ThemeColorPicker } from '../../components/ThemeColorPicker';
+import { THEME_COLORS } from '../../utils/themeColors';
+import { useTheme } from '../../hooks/useTheme';
 
 interface SettingsModalProps {
   isOpen: boolean;
@@ -51,6 +51,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   onUpdateSettings,
   onResetData,
 }) => {
+  const { themeColor, setThemeColor } = useTheme();
+
   React.useEffect(() => {
     if (!isOpen) return;
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -77,84 +79,122 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
     }
   };
 
+  const activeThemeColor = settings.themeColor || themeColor || 'blue';
+
+  const handleColorChange = (newColor: ThemeColor) => {
+    setThemeColor(newColor);
+    onUpdateSettings({
+      ...settings,
+      themeColor: newColor,
+    });
+  };
+
   return (
     <AnimatePresence>
       {isOpen && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-slate-950/70 backdrop-blur-xs overflow-y-auto"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/50 overflow-y-auto"
           onClick={onClose}
         >
           <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            initial={{ opacity: 0, scale: 0.94, y: 12 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            className="w-full max-w-lg bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-7 shadow-2xl border border-slate-200 dark:border-slate-800 flex flex-col max-h-[90vh] overflow-hidden my-auto"
+            exit={{ opacity: 0, scale: 0.94, y: 8 }}
+            transition={{ duration: 0.18, ease: 'easeOut' }}
+            className="w-full max-w-lg bg-white dark:bg-[#1E1F20] rounded-[28px] p-5 sm:p-6 shadow-2xl border border-[#E0E3E7] dark:border-[#3C4043] flex flex-col max-h-[90vh] overflow-hidden my-auto"
             role="dialog"
             aria-modal="true"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
-            <div className="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800 shrink-0">
+            <div className="flex items-center justify-between pb-4 border-b border-[#E0E3E7] dark:border-[#3C4043] shrink-0">
               <div className="flex items-center gap-3">
-                <div className="p-2.5 rounded-2xl bg-teal-50 dark:bg-teal-950/60 text-teal-600 dark:text-teal-400">
+                <div
+                  className="w-10 h-10 rounded-[14px] flex items-center justify-center text-white shrink-0 shadow-xs"
+                  style={{ backgroundColor: 'var(--app-accent, #1A73E8)' }}
+                >
                   <Volume2 className="w-5 h-5" />
                 </div>
                 <div>
-                  <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white">
-                    Sound & Reminders
+                  <h2 className="text-[18px] font-medium text-[#1F1F1F] dark:text-[#E3E3E3]">
+                    Preferences & Sounds
                   </h2>
-                  <p className="text-xs text-slate-500 dark:text-slate-400">
-                    Synthesizer alarms & alert preferences
+                  <p className="text-[12px] text-[#444746] dark:text-[#9AA0A6]">
+                    Theme colors, audio chimes & routine timings
                   </p>
                 </div>
               </div>
               <button
                 onClick={onClose}
-                className="p-2 rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                className="w-9 h-9 rounded-full hover:bg-[#F0F4F9] dark:hover:bg-[#282A2C] text-[#444746] dark:text-[#9AA0A6] transition-colors flex items-center justify-center cursor-pointer"
                 title="Close"
               >
-                <X className="w-5 h-5" />
+                <X className="w-4.5 h-4.5" />
               </button>
             </div>
 
-            <div className="overflow-y-auto px-1 sm:px-2 py-5 space-y-6 flex-1">
-              {/* Alarm Sound Preset Selector */}
-              <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2.5">
-                  Alarm Melody
-                </label>
+            <div className="overflow-y-auto px-0.5 py-4 space-y-4 flex-1">
+              {/* Theme Color Selection (Google Material You Palettes) */}
+              <div className="p-4 rounded-[22px] bg-[#F0F4F9]/60 dark:bg-[#282A2C]/60 border border-[#E0E3E7] dark:border-[#3C4043]">
+                <ThemeColorPicker
+                  selectedColor={activeThemeColor}
+                  onSelectColor={handleColorChange}
+                />
+              </div>
+
+              {/* Sound Presets */}
+              <div className="p-4 rounded-[22px] bg-[#F0F4F9]/60 dark:bg-[#282A2C]/60 border border-[#E0E3E7] dark:border-[#3C4043] space-y-3">
+                <div>
+                  <p className="text-[13px] font-medium text-[#1F1F1F] dark:text-[#E3E3E3]">
+                    Alarm Melody
+                  </p>
+                  <p className="text-[11px] text-[#444746] dark:text-[#9AA0A6]">
+                    Web Audio synth chimes for medication alarms
+                  </p>
+                </div>
+
                 <div className="space-y-2">
                   {SOUND_PRESETS.map((item) => {
                     const isSelected = settings.soundPreset === item.id;
                     return (
                       <div
                         key={item.id}
-                        className={`flex items-center justify-between p-3.5 rounded-2xl border transition-all ${
+                        className={`p-3 rounded-[16px] border transition-all flex items-center justify-between ${
                           isSelected
-                            ? 'border-teal-500 bg-teal-50/60 dark:bg-teal-950/40 shadow-xs'
-                            : 'border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/30 hover:border-slate-300 dark:hover:border-slate-700'
+                            ? 'bg-white dark:bg-[#1E1F20] border-[var(--app-accent,#1A73E8)] shadow-xs'
+                            : 'bg-white/80 dark:bg-[#1E1F20]/80 border-[#E0E3E7] dark:border-[#3C4043]'
                         }`}
                       >
-                        <button
-                          type="button"
+                        <div
                           onClick={() => onUpdateSettings({ ...settings, soundPreset: item.id })}
-                          className="flex-1 text-left"
+                          className="flex items-center gap-2.5 flex-1 cursor-pointer select-none"
                         >
-                          <div className="flex items-center gap-2">
-                            <p className="text-xs font-semibold text-slate-900 dark:text-white">
+                          <div
+                            className={`w-4.5 h-4.5 rounded-full flex items-center justify-center shrink-0 ${
+                              isSelected
+                                ? 'text-white'
+                                : 'border border-[#747775] dark:border-[#8E918F]'
+                            }`}
+                            style={{
+                              backgroundColor: isSelected ? 'var(--app-accent, #1A73E8)' : undefined,
+                            }}
+                          >
+                            {isSelected && <Check className="w-3 h-3 stroke-[3]" />}
+                          </div>
+                          <div>
+                            <p className="text-[13px] font-medium text-[#1F1F1F] dark:text-[#E3E3E3]">
                               {item.label}
                             </p>
-                            {isSelected && <Check className="w-3.5 h-3.5 text-teal-600 dark:text-teal-400" />}
+                            <p className="text-[11px] text-[#444746] dark:text-[#9AA0A6]">
+                              {item.desc}
+                            </p>
                           </div>
-                          <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
-                            {item.desc}
-                          </p>
-                        </button>
+                        </div>
 
                         <button
                           type="button"
                           onClick={() => handleSoundTest(item.id)}
-                          className="px-3 py-1.5 rounded-xl bg-slate-200/80 dark:bg-slate-700/80 hover:bg-teal-600 hover:text-white dark:hover:bg-teal-500 transition-colors text-xs font-semibold flex items-center gap-1.5 text-slate-700 dark:text-slate-200"
+                          className="px-3 py-1.5 rounded-full bg-[#F0F4F9] dark:bg-[#282A2C] hover:bg-[#E0E3E7] dark:hover:bg-[#3C4043] transition-colors text-[12px] font-medium flex items-center gap-1.5 text-[#1F1F1F] dark:text-[#E3E3E3] cursor-pointer"
                           title="Listen to melody"
                         >
                           <Play className="w-3 h-3 fill-current" />
@@ -167,12 +207,15 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               </div>
 
               {/* Volume Control */}
-              <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 space-y-2.5">
+              <div className="p-4 rounded-[22px] bg-[#F0F4F9]/60 dark:bg-[#282A2C]/60 border border-[#E0E3E7] dark:border-[#3C4043] space-y-2.5">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+                  <span className="text-[13px] font-medium text-[#1F1F1F] dark:text-[#E3E3E3]">
                     Alarm Volume
                   </span>
-                  <span className="text-xs font-mono font-bold text-teal-600 dark:text-teal-400">
+                  <span
+                    className="text-[13px] font-mono font-medium"
+                    style={{ color: 'var(--app-accent, #1A73E8)' }}
+                  >
                     {Math.round(settings.soundVolume * 100)}%
                   </span>
                 </div>
@@ -185,15 +228,16 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   onChange={(e) =>
                     onUpdateSettings({ ...settings, soundVolume: parseFloat(e.target.value) })
                   }
-                  className="w-full h-2.5 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-teal-600"
+                  className="w-full h-2 bg-[#E0E3E7] dark:bg-[#3C4043] rounded-lg appearance-none cursor-pointer"
+                  style={{ accentColor: 'var(--app-accent, #1A73E8)' }}
                 />
               </div>
 
               {/* Repeat count */}
-              <div className="flex items-center justify-between p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800">
+              <div className="flex items-center justify-between p-4 rounded-[22px] bg-[#F0F4F9]/60 dark:bg-[#282A2C]/60 border border-[#E0E3E7] dark:border-[#3C4043]">
                 <div>
-                  <p className="text-xs font-semibold text-slate-900 dark:text-white">Alarm Repetition</p>
-                  <p className="text-[11px] text-slate-500 dark:text-slate-400">Number of melodic loops</p>
+                  <p className="text-[13px] font-medium text-[#1F1F1F] dark:text-[#E3E3E3]">Alarm Repetition</p>
+                  <p className="text-[11px] text-[#444746] dark:text-[#9AA0A6]">Number of melodic loops</p>
                 </div>
                 <div className="flex items-center gap-1.5">
                   {[1, 2, 3, 5].map((rep) => (
@@ -201,11 +245,12 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                       key={rep}
                       type="button"
                       onClick={() => onUpdateSettings({ ...settings, soundRepeat: rep })}
-                      className={`px-3 py-1.5 text-xs font-medium rounded-xl transition-all ${
+                      className="px-3 py-1.5 text-[12px] font-medium rounded-full transition-all cursor-pointer"
+                      style={
                         settings.soundRepeat === rep
-                          ? 'bg-teal-600 text-white font-bold shadow-xs'
-                          : 'bg-slate-200/80 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-600'
-                      }`}
+                          ? { backgroundColor: 'var(--app-accent, #1A73E8)', color: '#FFFFFF' }
+                          : { backgroundColor: 'rgba(68, 71, 70, 0.12)', color: 'inherit' }
+                      }
                     >
                       {rep}x
                     </button>
@@ -214,16 +259,19 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               </div>
 
               {/* Push Notifications Toggle */}
-              <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 flex items-center justify-between">
+              <div className="p-4 rounded-[22px] bg-[#F0F4F9]/60 dark:bg-[#282A2C]/60 border border-[#E0E3E7] dark:border-[#3C4043] flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="p-2.5 rounded-xl bg-teal-50 dark:bg-teal-950/50 text-teal-600 dark:text-teal-400">
+                  <div
+                    className="p-2.5 rounded-[12px] text-white"
+                    style={{ backgroundColor: 'var(--app-accent, #1A73E8)' }}
+                  >
                     <Bell className="w-4 h-4" />
                   </div>
                   <div>
-                    <p className="text-xs font-semibold text-slate-900 dark:text-white">
+                    <p className="text-[13px] font-medium text-[#1F1F1F] dark:text-[#E3E3E3]">
                       Device Notifications
                     </p>
-                    <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                    <p className="text-[11px] text-[#444746] dark:text-[#9AA0A6]">
                       {notificationService.getPermission() === 'granted'
                         ? 'Push notifications enabled'
                         : 'Requires browser permission'}
@@ -235,59 +283,58 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   <button
                     type="button"
                     onClick={handleRequestNotification}
-                    className="px-3.5 py-2 bg-teal-600 hover:bg-teal-700 text-white text-xs font-semibold rounded-xl shadow-xs transition-colors"
+                    className="px-4 py-1.5 text-white text-[12px] font-medium rounded-full shadow-xs transition-colors cursor-pointer"
+                    style={{ backgroundColor: 'var(--app-accent, #1A73E8)' }}
                   >
                     Enable
                   </button>
                 ) : (
-                  <span className="text-xs text-emerald-600 dark:text-emerald-400 font-semibold flex items-center gap-1">
-                    <Check className="w-3.5 h-3.5" /> Active
+                  <span className="text-[12px] text-[#1E8E3E] dark:text-[#81C995] font-medium flex items-center gap-1">
+                    <Check className="w-3.5 h-3.5 stroke-[2.5]" /> Active
                   </span>
                 )}
               </div>
 
-              {/* Daily Schedule Default Times (Morning, Afternoon, Evening, Night) */}
-              <div className="p-4 sm:p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 space-y-3.5">
+              {/* Daily Schedule Default Times */}
+              <div className="p-4 rounded-[22px] bg-[#F0F4F9]/60 dark:bg-[#282A2C]/60 border border-[#E0E3E7] dark:border-[#3C4043] space-y-3">
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2.5">
-                    <div className="p-2 rounded-xl bg-teal-50 dark:bg-teal-950/50 text-teal-600 dark:text-teal-400">
-                      <Clock className="w-4 h-4" />
-                    </div>
+                  <div className="flex items-center gap-2">
+                    <Clock className="w-4 h-4" style={{ color: 'var(--app-accent, #1A73E8)' }} />
                     <div>
-                      <p className="text-xs font-semibold text-slate-900 dark:text-white">
+                      <p className="text-[13px] font-medium text-[#1F1F1F] dark:text-[#E3E3E3]">
                         Default Schedule Times
                       </p>
-                      <p className="text-[11px] text-slate-500 dark:text-slate-400">
-                        Set custom daily hours for your routines
+                      <p className="text-[11px] text-[#444746] dark:text-[#9AA0A6]">
+                        Daily routine hours for your slots
                       </p>
                     </div>
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                   {[
                     {
                       key: 'morning' as keyof SlotTimeSettings,
                       label: 'Morning (Wakeup)',
-                      icon: <Sunrise className="w-4 h-4 text-amber-500" />,
+                      icon: <Sunrise className="w-4 h-4 text-[#F29900]" />,
                       defaultTime: DEFAULT_SLOT_TIMES.morning,
                     },
                     {
                       key: 'afternoon' as keyof SlotTimeSettings,
                       label: 'Afternoon (Lunch)',
-                      icon: <Sun className="w-4 h-4 text-amber-500" />,
+                      icon: <Sun className="w-4 h-4 text-[#1A73E8]" />,
                       defaultTime: DEFAULT_SLOT_TIMES.afternoon,
                     },
                     {
                       key: 'evening' as keyof SlotTimeSettings,
                       label: 'Evening (Dinner)',
-                      icon: <Sunset className="w-4 h-4 text-orange-500" />,
+                      icon: <Sunset className="w-4 h-4 text-[#EA4335]" />,
                       defaultTime: DEFAULT_SLOT_TIMES.evening,
                     },
                     {
                       key: 'night' as keyof SlotTimeSettings,
                       label: 'Night (Bedtime)',
-                      icon: <Moon className="w-4 h-4 text-indigo-400" />,
+                      icon: <Moon className="w-4 h-4 text-[#9334E6]" />,
                       defaultTime: DEFAULT_SLOT_TIMES.night,
                     },
                   ].map((slot) => {
@@ -296,16 +343,19 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     return (
                       <label
                         key={slot.key}
-                        className="p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700/80 flex items-center justify-between gap-2.5 hover:border-teal-500 transition-colors cursor-pointer shadow-xs"
+                        className="p-3 rounded-[16px] bg-white dark:bg-[#1E1F20] border border-[#E0E3E7] dark:border-[#3C4043] flex items-center justify-between gap-2.5 hover:border-[var(--app-accent,#1A73E8)] transition-colors cursor-pointer shadow-xs"
                       >
                         <div className="flex items-center gap-2 min-w-0">
                           {slot.icon}
-                          <span className="text-xs font-medium text-slate-700 dark:text-slate-300 truncate">
+                          <span className="text-[12px] font-medium text-[#1F1F1F] dark:text-[#E3E3E3] truncate">
                             {slot.label}
                           </span>
                         </div>
                         <div className="flex items-center gap-1.5 shrink-0">
-                          <span className="text-xs font-mono font-bold text-teal-700 dark:text-teal-300">
+                          <span
+                            className="text-[12px] font-mono font-medium"
+                            style={{ color: 'var(--app-accent, #1A73E8)' }}
+                          >
                             {formatTime12h(currentVal)}
                           </span>
                           <input
@@ -332,14 +382,14 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               </div>
 
               {/* Vibrate Toggle */}
-              <div className="flex items-center justify-between p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800">
+              <div className="flex items-center justify-between p-4 rounded-[22px] bg-[#F0F4F9]/60 dark:bg-[#282A2C]/60 border border-[#E0E3E7] dark:border-[#3C4043]">
                 <div className="flex items-center gap-3">
-                  <div className="p-2.5 rounded-xl bg-slate-200/60 dark:bg-slate-700/60 text-slate-700 dark:text-slate-300">
+                  <div className="p-2.5 rounded-[12px] bg-black/5 dark:bg-white/10 text-[#1F1F1F] dark:text-[#E3E3E3]">
                     <Vibrate className="w-4 h-4" />
                   </div>
                   <div>
-                    <p className="text-xs font-semibold text-slate-900 dark:text-white">Haptic Vibration</p>
-                    <p className="text-[11px] text-slate-500 dark:text-slate-400">Pulse device on alarms</p>
+                    <p className="text-[13px] font-medium text-[#1F1F1F] dark:text-[#E3E3E3]">Haptic Vibration</p>
+                    <p className="text-[11px] text-[#444746] dark:text-[#9AA0A6]">Pulse device on alarms</p>
                   </div>
                 </div>
                 <input
@@ -348,16 +398,17 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   onChange={(e) =>
                     onUpdateSettings({ ...settings, vibrateEnabled: e.target.checked })
                   }
-                  className="w-5 h-5 accent-teal-600 rounded cursor-pointer"
+                  className="w-5 h-5 rounded cursor-pointer"
+                  style={{ accentColor: 'var(--app-accent, #1A73E8)' }}
                 />
               </div>
 
               {/* Reset Data */}
-              <div className="pt-3 border-t border-slate-100 dark:border-slate-800">
+              <div className="pt-2">
                 <button
                   type="button"
                   onClick={onResetData}
-                  className="w-full py-2.5 px-4 text-xs font-medium text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/30 rounded-xl transition-colors flex items-center justify-center gap-2 min-h-[42px]"
+                  className="w-full py-2.5 px-4 text-[13px] font-medium text-[#EA4335] hover:bg-[#FCE8E6] dark:hover:bg-[#EA4335]/15 rounded-full transition-colors flex items-center justify-center gap-2 cursor-pointer active:scale-95"
                 >
                   <RotateCcw className="w-4 h-4" />
                   Reset All Medications & Schedules
@@ -365,10 +416,11 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               </div>
             </div>
 
-            <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex justify-end shrink-0">
+            <div className="pt-3 border-t border-[#E0E3E7] dark:border-[#3C4043] flex justify-end shrink-0">
               <button
                 onClick={onClose}
-                className="px-6 py-2.5 bg-teal-600 hover:bg-teal-700 text-white rounded-xl text-xs font-semibold shadow-xs hover:shadow-teal-500/20 transition-all min-h-[42px]"
+                className="w-full py-3 px-6 text-white rounded-full text-[14px] font-medium shadow-xs transition-all active:scale-95 cursor-pointer"
+                style={{ backgroundColor: 'var(--app-accent, #1A73E8)' }}
               >
                 Done
               </button>

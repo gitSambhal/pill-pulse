@@ -1,12 +1,12 @@
 /**
- * PillPulse - Adherence & History View with Past Day Navigation
+ * PillPulse - Google Health Adherence & History View
  * Developer: Suhail Akhtar (https://suhail.top)
  */
 
-import React, { useState } from 'react';
-import { CheckCircle2, Flame, Calendar, Clock, ArrowRight, ChevronRight, History } from 'lucide-react';
+import React from 'react';
+import { CheckCircle2, Flame, Calendar, ChevronRight } from 'lucide-react';
 import { DoseHistoryLog, ScheduledDose } from '../../types';
-import { formatTime12h, getRelativeDateLabel, addDays, getTodayDateString } from '../../utils';
+import { getRelativeDateLabel, addDays, getTodayDateString } from '../../utils';
 
 interface AdherenceViewProps {
   history: DoseHistoryLog[];
@@ -19,7 +19,6 @@ export const AdherenceView: React.FC<AdherenceViewProps> = ({
   todayDoses,
   onSelectDate,
 }) => {
-  const [filterPeriod, setFilterPeriod] = useState<'7days' | 'all'>('7days');
   const today = getTodayDateString();
 
   const totalToday = todayDoses.length;
@@ -40,86 +39,93 @@ export const AdherenceView: React.FC<AdherenceViewProps> = ({
   }, [today]);
 
   return (
-    <div className="space-y-5 sm:space-y-6">
+    <div className="space-y-4 sm:space-y-5">
       {/* Header */}
       <div>
-        <h2 className="text-lg font-bold text-slate-900 dark:text-white tracking-tight">
-          Adherence & Past Logs
+        <h2 className="text-xl sm:text-2xl font-medium text-[#1F1F1F] dark:text-[#E3E3E3] tracking-normal font-sans">
+          Insights & History
         </h2>
-        <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-          Check previous days, streak records, and intake logs
+        <p className="text-[13px] text-[#444746] dark:text-[#9AA0A6] mt-0.5">
+          Adherence percentage, adherence streak, and complete logs
         </p>
       </div>
 
-      {/* Stats Cards */}
-      <div className="grid grid-cols-2 gap-3.5 sm:gap-4">
+      {/* Google Health Stat Cards */}
+      <div className="grid grid-cols-2 gap-3">
         {/* Adherence Card */}
-        <div className="p-5 sm:p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800/80 shadow-xs flex flex-col justify-between">
-          <div className="flex items-center justify-between mb-3">
-            <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">
+        <div className="p-4 sm:p-5 rounded-[24px] bg-white dark:bg-[#1E1F20] border border-[#E0E3E7] dark:border-[#3C4043] shadow-xs flex flex-col justify-between">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-[12px] font-medium text-[#444746] dark:text-[#9AA0A6]">
               Today's Rate
             </span>
-            <CheckCircle2 className="w-4 h-4 text-teal-500" />
+            <div className="w-7 h-7 rounded-full bg-[#E6F4EA] dark:bg-[#0D652D]/20 text-[#1E8E3E] dark:text-[#81C995] flex items-center justify-center">
+              <CheckCircle2 className="w-4 h-4" />
+            </div>
           </div>
           <div>
-            <div className="text-3xl sm:text-4xl font-bold tracking-tight text-teal-600 dark:text-teal-400">
+            <div className="text-3xl sm:text-4xl font-medium tracking-tight text-[#1E8E3E] dark:text-[#81C995]">
               {adherencePercent}%
             </div>
-            <p className="text-[11px] text-slate-400 dark:text-slate-500 mt-1">
-              {takenToday} of {totalToday} doses taken
+            <p className="text-[12px] text-[#444746] dark:text-[#9AA0A6] mt-1">
+              {takenToday} of {totalToday} taken
             </p>
           </div>
         </div>
 
         {/* Streak Card */}
-        <div className="p-5 sm:p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800/80 shadow-xs flex flex-col justify-between">
-          <div className="flex items-center justify-between mb-3">
-            <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">
+        <div className="p-4 sm:p-5 rounded-[24px] bg-white dark:bg-[#1E1F20] border border-[#E0E3E7] dark:border-[#3C4043] shadow-xs flex flex-col justify-between">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-[12px] font-medium text-[#444746] dark:text-[#9AA0A6]">
               Daily Streak
             </span>
-            <Flame className="w-4 h-4 text-amber-500" />
+            <div className="w-7 h-7 rounded-full bg-[#FEF7E0] dark:bg-[#FBBC04]/20 text-[#B06000] dark:text-[#FBBC04] flex items-center justify-center">
+              <Flame className="w-4 h-4" />
+            </div>
           </div>
           <div>
-            <div className="text-3xl sm:text-4xl font-bold tracking-tight text-amber-500">
+            <div className="text-3xl sm:text-4xl font-medium tracking-tight text-[#B06000] dark:text-[#FBBC04]">
               {streakDays} Days
             </div>
-            <p className="text-[11px] text-slate-400 dark:text-slate-500 mt-1">
-              Keep the rhythm going
+            <p className="text-[12px] text-[#444746] dark:text-[#9AA0A6] mt-1">
+              Consecutive days logged
             </p>
           </div>
         </div>
       </div>
 
       {/* Check Previous Days Quick Switcher */}
-      <div className="p-5 sm:p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800/80 shadow-xs space-y-3.5">
+      <div className="p-4 sm:p-5 rounded-[24px] bg-white dark:bg-[#1E1F20] border border-[#E0E3E7] dark:border-[#3C4043] shadow-xs space-y-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Calendar className="w-4 h-4 text-teal-600 dark:text-teal-400" />
-            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
-              Check Past Days Records
+            <Calendar className="w-4 h-4" style={{ color: 'var(--app-accent, #1A73E8)' }} />
+            <h3 className="text-[12px] font-medium text-[#444746] dark:text-[#9AA0A6]">
+              Past 7 Days History
             </h3>
           </div>
-          <span className="text-[10px] text-slate-400">Tap to inspect schedule</span>
+          <span className="text-[11px] text-[#444746] dark:text-[#9AA0A6]">Tap day to inspect</span>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
           {past7Days.map((dStr) => {
             return (
               <button
                 key={dStr}
                 onClick={() => onSelectDate(dStr)}
-                className="p-3 rounded-2xl border border-slate-200/70 dark:border-slate-800/70 hover:border-teal-500/60 hover:bg-teal-50/30 dark:hover:bg-teal-950/30 transition-all flex items-center justify-between text-xs text-left shadow-xs"
+                className="p-3 rounded-[16px] border border-[#E0E3E7] dark:border-[#3C4043] hover:border-[var(--app-accent,#1A73E8)] bg-[#F0F4F9]/60 dark:bg-[#282A2C]/60 transition-all flex items-center justify-between text-xs text-left cursor-pointer active:scale-[0.99]"
               >
                 <div>
-                  <span className="font-semibold text-slate-900 dark:text-white">
+                  <span className="font-medium text-[#1F1F1F] dark:text-[#E3E3E3] text-[13px]">
                     {getRelativeDateLabel(dStr)}
                   </span>
-                  <span className="text-[11px] text-slate-400 dark:text-slate-500 block mt-0.5">
+                  <span className="text-[11px] text-[#444746] dark:text-[#9AA0A6] block mt-0.5">
                     {dStr}
                   </span>
                 </div>
-                <div className="flex items-center gap-1 text-teal-600 dark:text-teal-400 text-xs font-medium">
-                  <span>View Doses</span>
+                <div
+                  className="flex items-center gap-1 text-xs font-medium"
+                  style={{ color: 'var(--app-accent, #1A73E8)' }}
+                >
+                  <span>Inspect</span>
                   <ChevronRight className="w-3.5 h-3.5" />
                 </div>
               </button>
@@ -129,12 +135,12 @@ export const AdherenceView: React.FC<AdherenceViewProps> = ({
       </div>
 
       {/* Log of Completed Doses */}
-      <div className="space-y-3">
-        <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 px-1">
-          Intake Log History
+      <div className="space-y-2.5">
+        <h3 className="text-[12px] font-medium text-[#444746] dark:text-[#9AA0A6] px-1">
+          Recent Activity Logs
         </h3>
 
-        <div className="space-y-2.5">
+        <div className="space-y-2">
           {history.slice(0, 12).map((log) => {
             const date = new Date(log.takenAt);
             const timeStr = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -143,33 +149,33 @@ export const AdherenceView: React.FC<AdherenceViewProps> = ({
             return (
               <div
                 key={log.id}
-                className="p-3.5 sm:p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800/60 shadow-xs flex items-center justify-between text-xs"
+                className="p-3.5 rounded-[16px] bg-white dark:bg-[#1E1F20] border border-[#E0E3E7] dark:border-[#3C4043] shadow-xs flex items-center justify-between text-xs"
               >
                 <div className="flex items-center gap-3 min-w-0 pr-2">
-                  <div className="w-8 h-8 rounded-full bg-teal-50 dark:bg-teal-950/60 text-teal-600 dark:text-teal-400 flex items-center justify-center shrink-0">
+                  <div className="w-7 h-7 rounded-full bg-[#E6F4EA] dark:bg-[#0D652D]/20 text-[#1E8E3E] dark:text-[#81C995] flex items-center justify-center shrink-0">
                     <CheckCircle2 className="w-4 h-4" />
                   </div>
                   <div className="min-w-0">
-                    <p className="font-semibold text-slate-900 dark:text-white truncate">
+                    <p className="font-medium text-[#1F1F1F] dark:text-[#E3E3E3] truncate text-[14px]">
                       {log.medicineName}
                     </p>
-                    <p className="text-[11px] text-slate-500 dark:text-slate-400 truncate mt-0.5">
+                    <p className="text-[12px] text-[#444746] dark:text-[#9AA0A6] truncate mt-0.5">
                       {log.dosage}
                       {log.routineName ? ` · ${log.routineName}` : ''}
                     </p>
                   </div>
                 </div>
 
-                <div className="text-right text-[11px] text-slate-400 dark:text-slate-500 font-mono shrink-0">
+                <div className="text-right text-[12px] text-[#444746] dark:text-[#9AA0A6] font-mono shrink-0">
                   <div>{timeStr}</div>
-                  <div className="text-[10px] text-slate-400 mt-0.5">{dateStr}</div>
+                  <div className="text-[10px] text-[#444746] dark:text-[#9AA0A6] mt-0.5">{dateStr}</div>
                 </div>
               </div>
             );
           })}
 
           {history.length === 0 && (
-            <div className="text-center py-12 bg-slate-50 dark:bg-slate-900/50 rounded-3xl border border-dashed border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 text-xs p-6">
+            <div className="text-center py-10 bg-white dark:bg-[#1E1F20] rounded-[24px] border border-[#E0E3E7] dark:border-[#3C4043] text-[#444746] dark:text-[#9AA0A6] text-xs p-6 shadow-xs">
               No dose logs recorded yet. Once you take your first medicine, it will appear here.
             </div>
           )}

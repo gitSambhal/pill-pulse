@@ -1,5 +1,5 @@
 /**
- * PillPulse - Slot Timing Badge & Icons for Morning, Afternoon, Evening, Night
+ * PillPulse - Google Material 3 Slot Timing Badge
  * Developer: Suhail Akhtar (https://suhail.top)
  */
 
@@ -29,48 +29,43 @@ export function getSlotTheme(slot: TimeSlot) {
     case 'morning':
       return {
         label: 'Morning',
-        bg: 'bg-amber-50 dark:bg-amber-950/40',
-        text: 'text-amber-700 dark:text-amber-300',
-        border: 'border-amber-200/80 dark:border-amber-800/60',
-        iconColor: 'text-amber-500 dark:text-amber-400',
-        badgeBg: 'bg-amber-100/70 dark:bg-amber-900/30',
+        bg: 'bg-[#FEF7E0] dark:bg-[#FBBC04]/15',
+        text: 'text-[#B06000] dark:text-[#FBBC04]',
+        border: 'border-[#FEEFC3] dark:border-[#FBBC04]/25',
+        iconColor: 'text-[#F29900]',
       };
     case 'afternoon':
       return {
         label: 'Afternoon',
-        bg: 'bg-orange-50 dark:bg-orange-950/40',
-        text: 'text-orange-700 dark:text-orange-300',
-        border: 'border-orange-200/80 dark:border-orange-800/60',
-        iconColor: 'text-orange-500 dark:text-orange-400',
-        badgeBg: 'bg-orange-100/70 dark:bg-orange-900/30',
+        bg: 'bg-[#E8F0FE] dark:bg-[#4285F4]/15',
+        text: 'text-[#1A73E8] dark:text-[#8AB4F8]',
+        border: 'border-[#D2E3FC] dark:border-[#4285F4]/25',
+        iconColor: 'text-[#1A73E8]',
       };
     case 'evening':
       return {
         label: 'Evening',
-        bg: 'bg-rose-50 dark:bg-rose-950/40',
-        text: 'text-rose-700 dark:text-rose-300',
-        border: 'border-rose-200/80 dark:border-rose-800/60',
-        iconColor: 'text-rose-500 dark:text-rose-400',
-        badgeBg: 'bg-rose-100/70 dark:bg-rose-900/30',
+        bg: 'bg-[#FCE8E6] dark:bg-[#EA4335]/15',
+        text: 'text-[#C5221F] dark:text-[#F28B82]',
+        border: 'border-[#FAD2CF] dark:border-[#EA4335]/25',
+        iconColor: 'text-[#EA4335]',
       };
     case 'night':
       return {
         label: 'Night',
-        bg: 'bg-indigo-50 dark:bg-indigo-950/40',
-        text: 'text-indigo-700 dark:text-indigo-300',
-        border: 'border-indigo-200/80 dark:border-indigo-800/60',
-        iconColor: 'text-indigo-400 dark:text-indigo-300',
-        badgeBg: 'bg-indigo-100/70 dark:bg-indigo-900/30',
+        bg: 'bg-[#F3E8FD] dark:bg-[#A142F4]/15',
+        text: 'text-[#8430CE] dark:text-[#C58AF9]',
+        border: 'border-[#E8D0FC] dark:border-[#A142F4]/25',
+        iconColor: 'text-[#9334E6]',
       };
     case 'custom':
     default:
       return {
         label: 'Custom',
-        bg: 'bg-teal-50 dark:bg-teal-950/40',
-        text: 'text-teal-700 dark:text-teal-300',
-        border: 'border-teal-200/80 dark:border-teal-800/60',
-        iconColor: 'text-teal-600 dark:text-teal-400',
-        badgeBg: 'bg-teal-100/70 dark:bg-teal-900/30',
+        bg: 'bg-[#E6F4EA] dark:bg-[#34A853]/15',
+        text: 'text-[#137333] dark:text-[#81C995]',
+        border: 'border-[#CEEAD6] dark:border-[#34A853]/25',
+        iconColor: 'text-[#1E8E3E]',
       };
   }
 }
@@ -91,9 +86,9 @@ export const SlotTimingBadge: React.FC<SlotTimingBadgeProps> = ({
   const theme = getSlotTheme(slot);
 
   const sizeClasses = {
-    xs: 'px-1.5 py-0.5 text-[10px] gap-1',
-    sm: 'px-2 py-0.5 text-xs gap-1.5',
-    md: 'px-2.5 py-1 text-xs gap-1.5',
+    xs: 'px-2 py-0.5 text-[10px] gap-1 rounded-full',
+    sm: 'px-2.5 py-0.5 text-[11px] gap-1.5 rounded-full',
+    md: 'px-3 py-1 text-xs gap-1.5 rounded-full',
   }[size];
 
   const iconSizes = {
@@ -104,10 +99,10 @@ export const SlotTimingBadge: React.FC<SlotTimingBadgeProps> = ({
 
   return (
     <span
-      className={`inline-flex items-center font-medium rounded-lg border ${theme.bg} ${theme.text} ${theme.border} ${sizeClasses} ${className}`}
+      className={`inline-flex items-center font-medium ${theme.bg} ${theme.text} ${theme.border} border ${sizeClasses} ${className}`}
     >
       <span className={theme.iconColor}>{getSlotIcon(slot, iconSizes)}</span>
-      {showLabel && <span className="capitalize">{getSlotLabel(slot)}</span>}
+      {showLabel && <span>{getSlotLabel(slot)}</span>}
     </span>
   );
 };

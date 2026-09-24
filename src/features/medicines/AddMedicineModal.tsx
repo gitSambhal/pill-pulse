@@ -1,5 +1,5 @@
 /**
- * PillPulse - Add / Edit Medicine Modal
+ * PillPulse - Google Material 3 Add / Edit Medicine Modal
  * Developer: Suhail Akhtar (https://suhail.top)
  */
 
@@ -88,184 +88,189 @@ export const AddMedicineModal: React.FC<AddMedicineModalProps> = ({
     <AnimatePresence>
       {isOpen && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-slate-950/70 backdrop-blur-xs overflow-y-auto"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/50 overflow-y-auto"
           onClick={onClose}
         >
           <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            initial={{ opacity: 0, scale: 0.94, y: 12 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            className="w-full max-w-lg bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-7 shadow-2xl border border-slate-200 dark:border-slate-800 flex flex-col max-h-[90vh] overflow-hidden my-auto"
+            exit={{ opacity: 0, scale: 0.94, y: 8 }}
+            transition={{ duration: 0.18, ease: 'easeOut' }}
+            className="w-full max-w-lg bg-white dark:bg-[#1E1F20] rounded-[28px] p-5 sm:p-6 shadow-2xl border border-[#E0E3E7] dark:border-[#3C4043] flex flex-col max-h-[90vh] overflow-hidden my-auto"
             role="dialog"
             aria-modal="true"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Modal Header */}
-            <div className="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800 shrink-0">
+            <div className="flex items-center justify-between pb-4 border-b border-[#E0E3E7] dark:border-[#3C4043] shrink-0">
               <div className="flex items-center gap-3">
-                <div className="p-2.5 rounded-2xl bg-teal-50 dark:bg-teal-950/60 text-teal-600 dark:text-teal-400">
-                  <Pill className="w-5 h-5" />
+                <div
+                  className="w-10 h-10 rounded-[14px] flex items-center justify-center shrink-0"
+                  style={{
+                    backgroundColor: 'var(--app-accent-subtle, #E8F0FE)',
+                    color: 'var(--app-accent, #1A73E8)',
+                  }}
+                >
+                  <Pill className="w-5 h-5 -rotate-45" />
                 </div>
                 <div>
-                  <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white">
-                    {editingMedicine ? 'Edit Medicine' : 'Add New Medicine'}
+                  <h2 className="text-[18px] font-medium text-[#1F1F1F] dark:text-[#E3E3E3]">
+                    {editingMedicine ? 'Edit Medication' : 'Add Medication'}
                   </h2>
-                  <p className="text-xs text-slate-500 dark:text-slate-400">
-                    {editingMedicine ? 'Update dosage, instructions, and stock' : 'Register a medicine or supplement in your cabinet'}
+                  <p className="text-[12px] text-[#444746] dark:text-[#9AA0A6]">
+                    {editingMedicine ? 'Update dosage, instructions, and stock' : 'Register a medicine in your cabinet'}
                   </p>
                 </div>
               </div>
               <button
                 onClick={onClose}
-                className="p-2 rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                className="w-9 h-9 rounded-full hover:bg-[#F0F4F9] dark:hover:bg-[#282A2C] text-[#444746] dark:text-[#9AA0A6] transition-colors flex items-center justify-center cursor-pointer"
                 title="Close"
               >
-                <X className="w-5 h-5" />
+                <X className="w-4.5 h-4.5" />
               </button>
             </div>
 
-            {/* Modal Form */}
-            <form onSubmit={handleSubmit} className="overflow-y-auto px-1 sm:px-2 py-5 space-y-5 flex-1">
+            <form onSubmit={handleSubmit} className="overflow-y-auto px-0.5 py-4 space-y-4 flex-1">
+              {/* Medicine Name */}
               <div>
-                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
-                  Medicine Name *
+                <label className="block text-[12px] font-medium text-[#444746] dark:text-[#9AA0A6] mb-1.5">
+                  Medication Name *
                 </label>
                 <input
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  placeholder="e.g. Metformin, Vitamin D, Omega 3"
-                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all"
+                  placeholder="e.g. Metformin, Vitamin D3, Lisinopril"
                   required
+                  className="w-full px-4 py-2.5 rounded-[12px] bg-[#F0F4F9] dark:bg-[#282A2C] border border-[#E0E3E7] dark:border-[#3C4043] focus:border-[var(--app-accent,#1A73E8)] text-[14px] text-[#1F1F1F] dark:text-[#E3E3E3] placeholder:text-[#444746] dark:placeholder:text-[#9AA0A6] focus:outline-none transition-colors"
                 />
               </div>
 
-              <div>
-                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
-                  Dosage / Strength
-                </label>
-                <input
-                  type="text"
-                  value={dosage}
-                  onChange={(e) => setDosage(e.target.value)}
-                  placeholder="e.g. 500mg, 1 tablet, 2000 IU"
-                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all"
-                />
+              {/* Dosage & Shape */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-[12px] font-medium text-[#444746] dark:text-[#9AA0A6] mb-1.5">
+                    Dosage *
+                  </label>
+                  <input
+                    type="text"
+                    value={dosage}
+                    onChange={(e) => setDosage(e.target.value)}
+                    placeholder="e.g. 500 mg, 1 tablet"
+                    required
+                    className="w-full px-4 py-2.5 rounded-[12px] bg-[#F0F4F9] dark:bg-[#282A2C] border border-[#E0E3E7] dark:border-[#3C4043] focus:border-[var(--app-accent,#1A73E8)] text-[14px] text-[#1F1F1F] dark:text-[#E3E3E3] placeholder:text-[#444746] dark:placeholder:text-[#9AA0A6] focus:outline-none transition-colors"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[12px] font-medium text-[#444746] dark:text-[#9AA0A6] mb-1.5">
+                    Form Factor
+                  </label>
+                  <select
+                    value={shape}
+                    onChange={(e) => setShape(e.target.value as PillShape)}
+                    className="w-full px-4 py-2.5 rounded-[12px] bg-[#F0F4F9] dark:bg-[#282A2C] border border-[#E0E3E7] dark:border-[#3C4043] focus:border-[var(--app-accent,#1A73E8)] text-[14px] text-[#1F1F1F] dark:text-[#E3E3E3] focus:outline-none transition-colors"
+                  >
+                    {PILL_SHAPES.map((s) => (
+                      <option key={s.id} value={s.id}>
+                        {s.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
 
+              {/* Instructions */}
               <div>
-                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
-                  Instructions / Clinical Notes
+                <label className="block text-[12px] font-medium text-[#444746] dark:text-[#9AA0A6] mb-1.5">
+                  Instructions / Notes
                 </label>
                 <input
                   type="text"
                   value={instructions}
                   onChange={(e) => setInstructions(e.target.value)}
-                  placeholder="e.g. With food, Before breakfast, Full glass of water"
-                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all"
+                  placeholder="e.g. Take with breakfast, with plenty of water"
+                  className="w-full px-4 py-2.5 rounded-[12px] bg-[#F0F4F9] dark:bg-[#282A2C] border border-[#E0E3E7] dark:border-[#3C4043] focus:border-[var(--app-accent,#1A73E8)] text-[14px] text-[#1F1F1F] dark:text-[#E3E3E3] placeholder:text-[#444746] dark:placeholder:text-[#9AA0A6] focus:outline-none transition-colors"
                 />
               </div>
 
-              {/* Shape selection */}
+              {/* Material You Color Tag Selection */}
               <div>
-                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-2">
-                  Pill Form / Type
+                <label className="block text-[12px] font-medium text-[#444746] dark:text-[#9AA0A6] mb-2">
+                  Color Tag
                 </label>
-                <div className="grid grid-cols-3 gap-2.5">
-                  {PILL_SHAPES.map((item) => (
+                <div className="flex items-center gap-2 flex-wrap">
+                  {PILL_COLORS.map((c) => (
                     <button
-                      key={item.id}
+                      key={c}
                       type="button"
-                      onClick={() => setShape(item.id)}
-                      className={`py-2.5 px-3 rounded-xl text-xs font-medium border transition-all text-center ${
-                        shape === item.id
-                          ? 'border-teal-500 bg-teal-50 dark:bg-teal-950/50 text-teal-700 dark:text-teal-300 font-semibold ring-1 ring-teal-500/30'
-                          : 'border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50'
+                      onClick={() => setColor(c)}
+                      className={`w-8 h-8 rounded-full flex items-center justify-center transition-all cursor-pointer ${
+                        color === c ? 'ring-2 ring-offset-2 ring-offset-white dark:ring-offset-[#1E1F20] scale-110' : 'hover:scale-105'
                       }`}
+                      style={{
+                        backgroundColor:
+                          c === 'teal' ? '#00796B' :
+                          c === 'sky' ? '#0288D1' :
+                          c === 'indigo' ? '#3949AB' :
+                          c === 'purple' ? '#7B1FA2' :
+                          c === 'amber' ? '#FFA000' :
+                          c === 'emerald' ? '#2E7D32' :
+                          c === 'rose' ? '#C2185B' :
+                          '#E64A19',
+                      }}
+                      title={c}
                     >
-                      {item.label}
+                      {color === c && <Check className="w-4 h-4 text-white stroke-[3]" />}
                     </button>
                   ))}
                 </div>
               </div>
 
-              {/* Color Accent Selection */}
-              <div>
-                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-2">
-                  Visual Color Accent
-                </label>
-                <div className="flex items-center gap-3 flex-wrap">
-                  {PILL_COLORS.map((col) => {
-                    const colorMap: Record<PillColor, string> = {
-                      teal: 'bg-teal-500',
-                      sky: 'bg-sky-500',
-                      indigo: 'bg-indigo-500',
-                      purple: 'bg-purple-500',
-                      amber: 'bg-amber-500',
-                      emerald: 'bg-emerald-500',
-                      rose: 'bg-rose-500',
-                      coral: 'bg-orange-500',
-                    };
-                    const isSelected = color === col;
-                    return (
-                      <button
-                        key={col}
-                        type="button"
-                        onClick={() => setColor(col)}
-                        className={`w-8 h-8 rounded-full ${colorMap[col]} flex items-center justify-center text-white transition-all ${
-                          isSelected ? 'ring-2 ring-offset-2 ring-teal-500 scale-110 shadow-xs' : 'opacity-80 hover:opacity-100 hover:scale-105'
-                        }`}
-                      >
-                        {isSelected && <Check className="w-4 h-4 stroke-[3]" />}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* Inventory & Low Stock Tracking */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
+              {/* Inventory & Low Stock */}
+              <div className="grid grid-cols-2 gap-3 pt-2 border-t border-[#E0E3E7] dark:border-[#3C4043]">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
-                    Pills in Stock
+                  <label className="block text-[12px] font-medium text-[#444746] dark:text-[#9AA0A6] mb-1.5">
+                    Remaining Units
                   </label>
                   <input
                     type="number"
                     min="0"
                     value={inventoryCount}
-                    onChange={(e) => setInventoryCount(parseInt(e.target.value, 10) || 0)}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-white text-xs focus:outline-none focus:ring-2 focus:ring-teal-500"
+                    onChange={(e) => setInventoryCount(Math.max(0, parseInt(e.target.value) || 0))}
+                    className="w-full px-4 py-2.5 rounded-[12px] bg-[#F0F4F9] dark:bg-[#282A2C] border border-[#E0E3E7] dark:border-[#3C4043] focus:border-[var(--app-accent,#1A73E8)] text-[14px] text-[#1F1F1F] dark:text-[#E3E3E3] focus:outline-none transition-colors"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
-                    Refill Alert At
+                  <label className="block text-[12px] font-medium text-[#444746] dark:text-[#9AA0A6] mb-1.5">
+                    Low Stock Alert At
                   </label>
                   <input
                     type="number"
                     min="0"
                     value={lowStockThreshold}
-                    onChange={(e) => setLowStockThreshold(parseInt(e.target.value, 10) || 0)}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-white text-xs focus:outline-none focus:ring-2 focus:ring-teal-500"
+                    onChange={(e) => setLowStockThreshold(Math.max(0, parseInt(e.target.value) || 0))}
+                    className="w-full px-4 py-2.5 rounded-[12px] bg-[#F0F4F9] dark:bg-[#282A2C] border border-[#E0E3E7] dark:border-[#3C4043] focus:border-[var(--app-accent,#1A73E8)] text-[14px] text-[#1F1F1F] dark:text-[#E3E3E3] focus:outline-none transition-colors"
                   />
                 </div>
               </div>
 
-              {/* Action Buttons */}
-              <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-end gap-3 shrink-0">
+              {/* Footer Actions */}
+              <div className="pt-4 border-t border-[#E0E3E7] dark:border-[#3C4043] flex items-center justify-end gap-2">
                 <button
                   type="button"
                   onClick={onClose}
-                  className="px-4 py-2.5 text-xs font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors min-h-[42px]"
+                  className="px-5 py-2.5 text-[13px] font-medium rounded-full hover:bg-[#F0F4F9] dark:hover:bg-[#282A2C] text-[#444746] dark:text-[#9AA0A6] transition-colors cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2.5 bg-teal-600 hover:bg-teal-700 text-white font-semibold text-xs rounded-xl shadow-xs hover:shadow-teal-500/20 transition-all min-h-[42px] flex items-center gap-1.5"
+                  className="px-6 py-2.5 text-[13px] font-medium rounded-full text-white shadow-xs transition-all active:scale-95 cursor-pointer"
+                  style={{ backgroundColor: 'var(--app-accent, #1A73E8)' }}
                 >
-                  <Check className="w-4 h-4" />
-                  {editingMedicine ? 'Save Changes' : 'Save Medicine'}
+                  {editingMedicine ? 'Save Changes' : 'Add Medication'}
                 </button>
               </div>
             </form>

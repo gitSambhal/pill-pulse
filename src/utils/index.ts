@@ -152,68 +152,68 @@ export function getPillColorClasses(color: PillColor): {
   switch (color) {
     case 'teal':
       return {
-        bg: 'bg-teal-500/10 dark:bg-teal-500/20',
-        text: 'text-teal-600 dark:text-teal-400',
-        border: 'border-teal-200 dark:border-teal-800',
-        glow: 'shadow-teal-500/20',
-        badge: 'bg-teal-50 dark:bg-teal-950/60 text-teal-700 dark:text-teal-300',
+        bg: 'bg-[#30B0C7]/15 dark:bg-[#30B0C7]/20',
+        text: 'text-[#008299] dark:text-[#30B0C7]',
+        border: 'border-[#30B0C7]/30 dark:border-[#30B0C7]/40',
+        glow: '',
+        badge: 'bg-[#30B0C7]/12 text-[#008299] dark:text-[#30B0C7]',
       };
     case 'sky':
       return {
-        bg: 'bg-sky-500/10 dark:bg-sky-500/20',
-        text: 'text-sky-600 dark:text-sky-400',
-        border: 'border-sky-200 dark:border-sky-800',
-        glow: 'shadow-sky-500/20',
-        badge: 'bg-sky-50 dark:bg-sky-950/60 text-sky-700 dark:text-sky-300',
+        bg: 'bg-[#007AFF]/15 dark:bg-[#007AFF]/20',
+        text: 'text-[#007AFF] dark:text-[#0A84FF]',
+        border: 'border-[#007AFF]/30 dark:border-[#007AFF]/40',
+        glow: '',
+        badge: 'bg-[#007AFF]/12 text-[#007AFF] dark:text-[#0A84FF]',
       };
     case 'indigo':
       return {
-        bg: 'bg-indigo-500/10 dark:bg-indigo-500/20',
-        text: 'text-indigo-600 dark:text-indigo-400',
-        border: 'border-indigo-200 dark:border-indigo-800',
-        glow: 'shadow-indigo-500/20',
-        badge: 'bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300',
+        bg: 'bg-[#5856D6]/15 dark:bg-[#5856D6]/20',
+        text: 'text-[#5856D6] dark:text-[#5E5CE6]',
+        border: 'border-[#5856D6]/30 dark:border-[#5856D6]/40',
+        glow: '',
+        badge: 'bg-[#5856D6]/12 text-[#5856D6] dark:text-[#5E5CE6]',
       };
     case 'purple':
       return {
-        bg: 'bg-purple-500/10 dark:bg-purple-500/20',
-        text: 'text-purple-600 dark:text-purple-400',
-        border: 'border-purple-200 dark:border-purple-800',
-        glow: 'shadow-purple-500/20',
-        badge: 'bg-purple-50 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300',
+        bg: 'bg-[#AF52DE]/15 dark:bg-[#AF52DE]/20',
+        text: 'text-[#AF52DE] dark:text-[#BF5AF2]',
+        border: 'border-[#AF52DE]/30 dark:border-[#AF52DE]/40',
+        glow: '',
+        badge: 'bg-[#AF52DE]/12 text-[#AF52DE] dark:text-[#BF5AF2]',
       };
     case 'amber':
       return {
-        bg: 'bg-amber-500/10 dark:bg-amber-500/20',
-        text: 'text-amber-600 dark:text-amber-400',
-        border: 'border-amber-200 dark:border-amber-800',
-        glow: 'shadow-amber-500/20',
-        badge: 'bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300',
+        bg: 'bg-[#FF9500]/15 dark:bg-[#FF9500]/20',
+        text: 'text-[#C97000] dark:text-[#FF9F0A]',
+        border: 'border-[#FF9500]/30 dark:border-[#FF9500]/40',
+        glow: '',
+        badge: 'bg-[#FF9500]/12 text-[#C97000] dark:text-[#FF9F0A]',
       };
     case 'rose':
       return {
-        bg: 'bg-rose-500/10 dark:bg-rose-500/20',
-        text: 'text-rose-600 dark:text-rose-400',
-        border: 'border-rose-200 dark:border-rose-800',
-        glow: 'shadow-rose-500/20',
-        badge: 'bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300',
+        bg: 'bg-[#FF2D55]/15 dark:bg-[#FF2D55]/20',
+        text: 'text-[#D01A40] dark:text-[#FF375F]',
+        border: 'border-[#FF2D55]/30 dark:border-[#FF2D55]/40',
+        glow: '',
+        badge: 'bg-[#FF2D55]/12 text-[#D01A40] dark:text-[#FF375F]',
       };
     case 'emerald':
       return {
-        bg: 'bg-emerald-500/10 dark:bg-emerald-500/20',
-        text: 'text-emerald-600 dark:text-emerald-400',
-        border: 'border-emerald-200 dark:border-emerald-800',
-        glow: 'shadow-emerald-500/20',
-        badge: 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300',
+        bg: 'bg-[#34C759]/15 dark:bg-[#34C759]/20',
+        text: 'text-[#248A3D] dark:text-[#32D74B]',
+        border: 'border-[#34C759]/30 dark:border-[#34C759]/40',
+        glow: '',
+        badge: 'bg-[#34C759]/12 text-[#248A3D] dark:text-[#32D74B]',
       };
     case 'coral':
     default:
       return {
-        bg: 'bg-orange-500/10 dark:bg-orange-500/20',
-        text: 'text-orange-600 dark:text-orange-400',
-        border: 'border-orange-200 dark:border-orange-800',
-        glow: 'shadow-orange-500/20',
-        badge: 'bg-orange-50 dark:bg-orange-950/60 text-orange-700 dark:text-orange-300',
+        bg: 'bg-[#FF3B30]/15 dark:bg-[#FF3B30]/20',
+        text: 'text-[#D70015] dark:text-[#FF453A]',
+        border: 'border-[#FF3B30]/30 dark:border-[#FF3B30]/40',
+        glow: '',
+        badge: 'bg-[#FF3B30]/12 text-[#D70015] dark:text-[#FF453A]',
       };
   }
 }

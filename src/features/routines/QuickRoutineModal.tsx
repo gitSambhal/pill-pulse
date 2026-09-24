@@ -272,65 +272,72 @@ export const QuickRoutineModal: React.FC<QuickRoutineModalProps> = ({
     <AnimatePresence>
       {isOpen && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-slate-950/70 backdrop-blur-xs overflow-y-auto"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/45 overflow-y-auto"
           onClick={onClose}
         >
           <motion.div
-            initial={{ opacity: 0, scale: 0.96, y: 15 }}
+            initial={{ opacity: 0, scale: 0.94, y: 12 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.96 }}
-            className="w-full max-w-2xl bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-7 shadow-2xl border border-slate-200/80 dark:border-slate-800 my-auto flex flex-col max-h-[90vh]"
+            exit={{ opacity: 0, scale: 0.94, y: 8 }}
+            transition={{ duration: 0.18, ease: 'easeOut' }}
+            className="w-full max-w-2xl bg-white dark:bg-[#1E1F20] rounded-[28px] p-5 sm:p-6 shadow-2xl border border-[#E0E3E7] dark:border-[#3C4043] my-auto flex flex-col max-h-[90vh]"
             role="dialog"
             aria-modal="true"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
-            <div className="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800 shrink-0">
+            <div className="flex items-center justify-between pb-4 border-b border-[#E0E3E7] dark:border-[#3C4043] shrink-0">
               <div className="flex items-center gap-3">
-                <div className="p-2.5 rounded-2xl bg-teal-50 dark:bg-teal-950/50 text-teal-600 dark:text-teal-400">
+                <div
+                  className="w-10 h-10 rounded-[14px] flex items-center justify-center shrink-0"
+                  style={{
+                    backgroundColor: 'var(--app-accent-subtle, #E8F0FE)',
+                    color: 'var(--app-accent, #1A73E8)',
+                  }}
+                >
                   <Layers className="w-5 h-5" />
                 </div>
                 <div>
-                  <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white tracking-tight">
+                  <h2 className="text-[18px] font-medium text-[#1F1F1F] dark:text-[#E3E3E3]">
                     Medication Routine Setup
                   </h2>
-                  <p className="text-xs text-slate-500 dark:text-slate-400">
-                    Set start time, intervals, and medicines in sequence
+                  <p className="text-[12px] text-[#444746] dark:text-[#9AA0A6]">
+                    Sequential schedule with custom timing intervals
                   </p>
                 </div>
               </div>
               <button
                 onClick={onClose}
-                className="p-2 rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-                title="Close (Esc)"
+                className="w-9 h-9 rounded-full hover:bg-[#F0F4F9] dark:hover:bg-[#282A2C] text-[#444746] dark:text-[#9AA0A6] transition-colors flex items-center justify-center cursor-pointer"
+                title="Close"
               >
-                <X className="w-5 h-5" />
+                <X className="w-4.5 h-4.5" />
               </button>
             </div>
 
-            <form onSubmit={handleSubmit} className="overflow-y-auto px-1 sm:px-2.5 py-5 space-y-6 flex-1">
+            <form onSubmit={handleSubmit} className="overflow-y-auto px-0.5 sm:px-1 py-4 space-y-4 flex-1">
               {/* 1. Dedicated Starting Time Section */}
-              <div className="p-4 sm:p-5 rounded-2xl bg-teal-50/50 dark:bg-teal-950/30 border border-teal-100 dark:border-teal-900/50 space-y-4">
+              <div className="p-4 rounded-2xl bg-[#F2F2F7] dark:bg-[#2C2C2E]/60 border border-[#E5E5EA] dark:border-[#2C2C2E] space-y-3.5">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <Clock className="w-4 h-4 text-teal-600 dark:text-teal-400" />
-                    <span className="text-xs font-bold uppercase tracking-wider text-teal-900 dark:text-teal-200">
-                      1. Choose Starting Time
+                    <Clock className="w-4 h-4 text-[#007AFF]" />
+                    <span className="text-[12px] font-semibold uppercase tracking-wider text-black dark:text-white">
+                      1. Starting Time
                     </span>
                   </div>
-                  <span className="text-xs font-mono font-bold text-teal-700 dark:text-teal-300 bg-white dark:bg-slate-900 px-3 py-1 rounded-xl shadow-xs border border-teal-200/50 dark:border-teal-800/50">
+                  <span className="text-[12px] font-mono font-semibold text-[#007AFF] bg-white dark:bg-[#1C1C1E] px-2.5 py-1 rounded-full shadow-2xs border border-[#E5E5EA] dark:border-[#2C2C2E]">
                     {formatTime12h(primaryStartTime)}
                   </span>
                 </div>
 
-                {/* Native Large Time Picker Input */}
+                {/* Native Time Picker Input */}
                 <div>
                   <label className="block relative cursor-pointer">
-                    <span className="block text-[11px] font-medium text-slate-600 dark:text-slate-400 mb-1.5">
-                      First Pill Scheduled At:
+                    <span className="block text-[12px] font-medium text-[#8E8E93] mb-1">
+                      First Medicine Scheduled At:
                     </span>
-                    <div className="flex items-center gap-2.5 px-4 py-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-teal-500 transition-colors shadow-xs">
-                      <Clock className="w-4 h-4 text-teal-500 shrink-0" />
+                    <div className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white dark:bg-[#1C1C1E] border border-transparent focus-within:border-[#007AFF] shadow-2xs">
+                      <Clock className="w-4 h-4 text-[#007AFF] shrink-0" />
                       <input
                         type="time"
                         value={primaryStartTime}
@@ -341,7 +348,7 @@ export const QuickRoutineModal: React.FC<QuickRoutineModalProps> = ({
                             morning: e.target.value,
                           }));
                         }}
-                        className="bg-transparent text-sm font-semibold font-mono text-slate-900 dark:text-white w-full focus:outline-none cursor-pointer"
+                        className="bg-transparent text-[14px] font-medium text-black dark:text-white w-full focus:outline-none cursor-pointer"
                         required
                       />
                     </div>
@@ -350,10 +357,10 @@ export const QuickRoutineModal: React.FC<QuickRoutineModalProps> = ({
 
                 {/* Quick Time Preset Chips */}
                 <div>
-                  <span className="block text-[11px] text-slate-600 dark:text-slate-400 mb-2 font-medium">
-                    Quick starting times:
+                  <span className="block text-[11px] text-[#8E8E93] mb-1.5 font-medium">
+                    Quick times:
                   </span>
-                  <div className="flex items-center gap-2 flex-wrap">
+                  <div className="flex items-center gap-1.5 flex-wrap">
                     {QUICK_START_TIMES.map((qt) => (
                       <button
                         key={qt.time}
@@ -365,10 +372,10 @@ export const QuickRoutineModal: React.FC<QuickRoutineModalProps> = ({
                             morning: qt.time,
                           }));
                         }}
-                        className={`px-3 py-1.5 rounded-xl text-xs font-mono transition-all ${
+                        className={`px-3 py-1 rounded-full text-[12px] font-medium transition-all ${
                           primaryStartTime === qt.time
-                            ? 'bg-teal-600 text-white font-bold shadow-xs scale-102'
-                            : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-800 hover:border-teal-500'
+                            ? 'bg-[#007AFF] text-white font-semibold shadow-2xs'
+                            : 'bg-white dark:bg-[#1C1C1E] text-[#8E8E93] border border-[#E5E5EA] dark:border-[#2C2C2E] hover:text-black dark:hover:text-white'
                         }`}
                       >
                         {qt.label}
@@ -378,16 +385,16 @@ export const QuickRoutineModal: React.FC<QuickRoutineModalProps> = ({
                 </div>
 
                 {/* Time Slots (Morning, Afternoon, Evening, Night) with custom times */}
-                <div className="pt-3 border-t border-teal-100 dark:border-teal-900/40">
+                <div className="pt-3 border-t border-[#E5E5EA] dark:border-[#2C2C2E]">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-[11px] font-semibold text-slate-700 dark:text-slate-300">
-                      Slot Times & Frequency:
+                    <span className="text-[12px] font-semibold text-black dark:text-white">
+                      Time Slot Application:
                     </span>
-                    <span className="text-[10px] text-slate-500 dark:text-slate-400">
-                      Tap time to customize
+                    <span className="text-[11px] text-[#8E8E93]">
+                      Tap time to edit
                     </span>
                   </div>
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3">
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                     {(['morning', 'afternoon', 'evening', 'night'] as TimeSlot[]).map((slot) => {
                       const isSelected = !!selectedSlots[slot];
                       const currentTime =
@@ -395,10 +402,10 @@ export const QuickRoutineModal: React.FC<QuickRoutineModalProps> = ({
                       return (
                         <div
                           key={slot}
-                          className={`p-3 rounded-2xl border transition-all text-xs flex flex-col justify-between gap-2 ${
+                          className={`p-2.5 rounded-xl border transition-all text-xs flex flex-col justify-between gap-1.5 ${
                             isSelected
-                              ? 'border-teal-500 bg-white dark:bg-slate-900 text-teal-900 dark:text-teal-100 font-semibold shadow-xs ring-1 ring-teal-500/20'
-                              : 'border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-900/40 text-slate-500 dark:text-slate-400'
+                              ? 'border-[#007AFF] bg-white dark:bg-[#1C1C1E] text-black dark:text-white font-semibold shadow-2xs'
+                              : 'border-transparent bg-white/60 dark:bg-[#1C1C1E]/60 text-[#8E8E93]'
                           }`}
                         >
                           <div
@@ -406,26 +413,16 @@ export const QuickRoutineModal: React.FC<QuickRoutineModalProps> = ({
                             className="flex items-center justify-between cursor-pointer select-none"
                           >
                             <div className="flex items-center gap-1.5 min-w-0">
-                              <span
-                                className={
-                                  slot === 'morning'
-                                    ? 'text-amber-500'
-                                    : slot === 'afternoon'
-                                    ? 'text-orange-500'
-                                    : slot === 'evening'
-                                    ? 'text-rose-500'
-                                    : 'text-indigo-400'
-                                }
-                              >
+                              <span>
                                 {getSlotIcon(slot, 'w-3.5 h-3.5')}
                               </span>
-                              <span className="capitalize font-bold truncate">{slot}</span>
+                              <span className="capitalize font-semibold truncate text-[12px]">{slot}</span>
                             </div>
                             <div
                               className={`w-4 h-4 rounded-full flex items-center justify-center text-[10px] shrink-0 ${
                                 isSelected
-                                  ? 'bg-teal-600 text-white'
-                                  : 'border border-slate-300 dark:border-slate-700'
+                                  ? 'bg-[#007AFF] text-white'
+                                  : 'border border-[#E5E5EA] dark:border-[#2C2C2E]'
                               }`}
                             >
                               {isSelected && <Check className="w-2.5 h-2.5 stroke-[3]" />}
@@ -434,10 +431,10 @@ export const QuickRoutineModal: React.FC<QuickRoutineModalProps> = ({
 
                           {/* Inline Custom Time Picker for this slot */}
                           <label
-                            className={`relative flex items-center justify-between gap-1 px-2.5 py-1.5 rounded-xl text-[11px] font-mono cursor-pointer transition-colors ${
+                            className={`relative flex items-center justify-between gap-1 px-2 py-1 rounded-lg text-[11px] font-mono cursor-pointer transition-colors ${
                               isSelected
-                                ? 'bg-teal-50 dark:bg-teal-950/60 text-teal-700 dark:text-teal-300 hover:bg-teal-100 dark:hover:bg-teal-900/40'
-                                : 'bg-slate-100/70 dark:bg-slate-800/50 text-slate-400 opacity-60'
+                                ? 'bg-[#F2F2F7] dark:bg-[#2C2C2E] text-[#007AFF]'
+                                : 'bg-transparent text-[#8E8E93] opacity-60'
                             }`}
                             title={`Set custom time for ${slot}`}
                           >
@@ -464,38 +461,38 @@ export const QuickRoutineModal: React.FC<QuickRoutineModalProps> = ({
                 </div>
               </div>
 
-              {/* 2. Regimen Name & 1-Click Templates */}
-              <div className="p-4 sm:p-5 rounded-2xl bg-slate-50/70 dark:bg-slate-800/40 border border-slate-200/80 dark:border-slate-800 space-y-4">
+              {/* 2. Routine Name & Presets */}
+              <div className="p-4 rounded-2xl bg-[#F2F2F7] dark:bg-[#2C2C2E]/60 border border-[#E5E5EA] dark:border-[#2C2C2E] space-y-3">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+                  <label className="block text-[13px] font-medium text-black dark:text-white mb-1.5">
                     Routine Name
                   </label>
                   <input
                     type="text"
                     value={routineName}
                     onChange={(e) => setRoutineName(e.target.value)}
-                    placeholder="e.g. Morning Medication Stack"
-                    className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all shadow-xs"
+                    placeholder="e.g. Morning Medication Routine"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-transparent focus:border-[#007AFF] bg-white dark:bg-[#1C1C1E] text-black dark:text-white text-[14px] focus:outline-none transition-all shadow-2xs"
                     required
                   />
                 </div>
 
                 {/* Ready-made Regimen Presets */}
                 <div>
-                  <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 flex items-center gap-1.5 mb-2">
-                    <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-                    Popular 1-Click Regimen Templates
+                  <span className="text-[11px] font-semibold uppercase tracking-wider text-[#8E8E93] flex items-center gap-1.5 mb-2">
+                    <Sparkles className="w-3.5 h-3.5 text-[#FF9500]" />
+                    Presets
                   </span>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     {PRESETS.map((preset, idx) => (
                       <button
                         key={idx}
                         type="button"
                         onClick={() => handleApplyPreset(preset)}
-                        className="text-left p-3 rounded-2xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-teal-500 hover:bg-teal-50/30 dark:hover:bg-teal-950/20 transition-all text-xs shadow-xs"
+                        className="text-left p-3 rounded-xl border border-transparent hover:border-[#007AFF] bg-white dark:bg-[#1C1C1E] transition-all text-xs shadow-2xs active:scale-[0.99]"
                       >
-                        <p className="font-semibold text-slate-900 dark:text-white truncate">{preset.name}</p>
-                        <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1 line-clamp-1">
+                        <p className="font-semibold text-black dark:text-white truncate text-[13px]">{preset.name}</p>
+                        <p className="text-[11px] text-[#8E8E93] mt-0.5 line-clamp-1">
                           {preset.description}
                         </p>
                       </button>
@@ -505,37 +502,37 @@ export const QuickRoutineModal: React.FC<QuickRoutineModalProps> = ({
               </div>
 
               {/* 3. Quick Global Gap Presets */}
-              <div className="p-4 sm:p-5 rounded-2xl bg-slate-100/80 dark:bg-slate-800/60 border border-slate-200/70 dark:border-slate-700/70 space-y-2">
-                <span className="text-xs font-semibold text-slate-700 dark:text-slate-300 block">
-                  Set Gap for All Next Pills:
+              <div className="p-3.5 rounded-2xl bg-[#F2F2F7] dark:bg-[#2C2C2E]/60 border border-[#E5E5EA] dark:border-[#2C2C2E] space-y-2">
+                <span className="text-[12px] font-medium text-[#8E8E93] block">
+                  Quick set intervals:
                 </span>
-                <div className="flex items-center gap-2 flex-wrap">
+                <div className="flex items-center gap-1.5 flex-wrap">
                   <button
                     type="button"
                     onClick={() => handleSetAllGaps(0)}
-                    className="px-3 py-1.5 rounded-xl text-xs font-semibold bg-white dark:bg-slate-900 text-teal-700 dark:text-teal-300 border border-slate-300 dark:border-slate-700 hover:border-teal-500 transition-colors flex items-center gap-1 shadow-xs"
+                    className="px-3 py-1 rounded-full text-[12px] font-semibold bg-white dark:bg-[#1C1C1E] text-[#007AFF] border border-[#E5E5EA] dark:border-[#2C2C2E] hover:border-[#007AFF] transition-colors flex items-center gap-1 shadow-2xs"
                   >
                     <Zap className="w-3.5 h-3.5" />
-                    No Gap (Take Together 0m)
+                    Together (0m)
                   </button>
                   <button
                     type="button"
                     onClick={() => handleSetAllGaps(5)}
-                    className="px-3 py-1.5 rounded-xl text-xs font-semibold bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700 hover:border-teal-500 transition-colors shadow-xs"
+                    className="px-3 py-1 rounded-full text-[12px] font-medium bg-white dark:bg-[#1C1C1E] text-black dark:text-white border border-[#E5E5EA] dark:border-[#2C2C2E] hover:border-[#007AFF] transition-colors shadow-2xs"
                   >
                     5m Gap
                   </button>
                   <button
                     type="button"
                     onClick={() => handleSetAllGaps(10)}
-                    className="px-3 py-1.5 rounded-xl text-xs font-semibold bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700 hover:border-teal-500 transition-colors shadow-xs"
+                    className="px-3 py-1 rounded-full text-[12px] font-medium bg-white dark:bg-[#1C1C1E] text-black dark:text-white border border-[#E5E5EA] dark:border-[#2C2C2E] hover:border-[#007AFF] transition-colors shadow-2xs"
                   >
                     10m Gap
                   </button>
                   <button
                     type="button"
                     onClick={() => handleSetAllGaps(15)}
-                    className="px-3 py-1.5 rounded-xl text-xs font-semibold bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700 hover:border-teal-500 transition-colors shadow-xs"
+                    className="px-3 py-1 rounded-full text-[12px] font-medium bg-white dark:bg-[#1C1C1E] text-black dark:text-white border border-[#E5E5EA] dark:border-[#2C2C2E] hover:border-[#007AFF] transition-colors shadow-2xs"
                   >
                     15m Gap
                   </button>
@@ -543,22 +540,22 @@ export const QuickRoutineModal: React.FC<QuickRoutineModalProps> = ({
               </div>
 
               {/* 4. Medicines List with Per-Medicine Gaps */}
-              <div className="space-y-3">
+              <div className="space-y-2.5">
                 <div className="flex items-center justify-between mb-1">
-                  <label className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                  <label className="text-[12px] font-semibold uppercase tracking-wider text-[#8E8E93]">
                     Medicines in Sequence
                   </label>
                   <button
                     type="button"
                     onClick={handleAddMedicineRow}
-                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-teal-600 dark:text-teal-400 hover:underline px-2 py-1 rounded-lg hover:bg-teal-50 dark:hover:bg-teal-950/50 transition-colors"
+                    className="inline-flex items-center gap-1 text-[13px] font-semibold text-[#007AFF] hover:underline px-2 py-0.5"
                   >
-                    <Plus className="w-4 h-4" />
-                    Add Another Pill
+                    <Plus className="w-3.5 h-3.5" />
+                    Add Pill
                   </button>
                 </div>
 
-                <div className="space-y-3.5">
+                <div className="space-y-2.5">
                   {medicines.map((med, index) => {
                     const isFirst = index === 0;
                     const offset = stepOffsets[index];
@@ -567,21 +564,21 @@ export const QuickRoutineModal: React.FC<QuickRoutineModalProps> = ({
                     return (
                       <div
                         key={index}
-                        className="p-4 sm:p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-800 space-y-3 shadow-xs"
+                        className="p-3.5 sm:p-4 rounded-2xl bg-white dark:bg-[#1C1C1E] border border-[#E5E5EA] dark:border-[#2C2C2E] space-y-2.5 shadow-2xs"
                       >
                         {/* Step Header & Calculated Time */}
                         <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-2.5">
-                            <span className="w-6 h-6 rounded-full bg-teal-600 text-white font-bold text-xs flex items-center justify-center shadow-xs">
+                          <div className="flex items-center gap-2">
+                            <span className="w-5 h-5 rounded-full bg-[#007AFF]/12 text-[#007AFF] font-bold text-[11px] flex items-center justify-center">
                               {index + 1}
                             </span>
-                            <span className="text-xs font-bold text-slate-900 dark:text-white">
+                            <span className="text-[13px] font-semibold text-black dark:text-white">
                               {isFirst ? 'First Medicine' : `Medicine ${index + 1}`}
                             </span>
                           </div>
 
                           <div className="flex items-center gap-2">
-                            <span className="text-xs font-mono font-bold text-teal-700 dark:text-teal-300 bg-white dark:bg-slate-900 px-2.5 py-1 rounded-lg border border-slate-200 dark:border-slate-800 shadow-xs">
+                            <span className="text-[12px] font-mono font-semibold text-[#007AFF] bg-[#F2F2F7] dark:bg-[#2C2C2E] px-2.5 py-0.5 rounded-full">
                               {formatTime12h(calculatedTime)}
                             </span>
 
@@ -589,17 +586,17 @@ export const QuickRoutineModal: React.FC<QuickRoutineModalProps> = ({
                               <button
                                 type="button"
                                 onClick={() => handleRemoveMedicineRow(index)}
-                                className="text-slate-400 hover:text-rose-500 transition-colors p-1.5 rounded-lg hover:bg-slate-200/50 dark:hover:bg-slate-700/50"
-                                title="Remove pill"
+                                className="w-7 h-7 rounded-full text-[#FF3B30] hover:bg-[#FF3B30]/12 transition-colors flex items-center justify-center"
+                                title="Remove"
                               >
-                                <Trash2 className="w-4 h-4" />
+                                <Trash2 className="w-3.5 h-3.5" />
                               </button>
                             )}
                           </div>
                         </div>
 
                         {/* Name & Dosage */}
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                           <div>
                             <input
                               type="text"
@@ -608,7 +605,7 @@ export const QuickRoutineModal: React.FC<QuickRoutineModalProps> = ({
                               onChange={(e) =>
                                 handleMedicineChange(index, 'name', e.target.value)
                               }
-                              className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500"
+                              className="w-full px-3 py-2 text-[13px] rounded-xl border border-transparent focus:border-[#007AFF] bg-[#F2F2F7] dark:bg-[#2C2C2E] text-black dark:text-white focus:outline-none"
                               required
                             />
                           </div>
@@ -620,7 +617,7 @@ export const QuickRoutineModal: React.FC<QuickRoutineModalProps> = ({
                               onChange={(e) =>
                                 handleMedicineChange(index, 'dosage', e.target.value)
                               }
-                              className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500"
+                              className="w-full px-3 py-2 text-[13px] rounded-xl border border-transparent focus:border-[#007AFF] bg-[#F2F2F7] dark:bg-[#2C2C2E] text-black dark:text-white focus:outline-none"
                             />
                           </div>
                         </div>
@@ -633,24 +630,24 @@ export const QuickRoutineModal: React.FC<QuickRoutineModalProps> = ({
                           onChange={(e) =>
                             handleMedicineChange(index, 'instructions', e.target.value)
                           }
-                          className="w-full px-3.5 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500"
+                          className="w-full px-3 py-2 text-[13px] rounded-xl border border-transparent focus:border-[#007AFF] bg-[#F2F2F7] dark:bg-[#2C2C2E] text-black dark:text-white focus:outline-none"
                         />
 
                         {/* Per-Medicine Gap Selector (For step 2 and beyond) */}
                         {!isFirst && (
-                          <div className="pt-2.5 border-t border-slate-200/70 dark:border-slate-700/70 space-y-2">
+                          <div className="pt-2 border-t border-[#E5E5EA] dark:border-[#2C2C2E] space-y-1.5">
                             <div className="flex items-center justify-between">
-                              <span className="text-[11px] font-semibold text-slate-600 dark:text-slate-400">
+                              <span className="text-[11px] font-medium text-[#8E8E93]">
                                 Gap after Step {index}:
                               </span>
-                              <span className="text-[11px] font-bold text-teal-600 dark:text-teal-400">
+                              <span className="text-[11px] font-semibold text-[#007AFF]">
                                 {med.gapFromPrevious === 0
-                                  ? 'Take together (0m)'
+                                  ? 'Together (0m)'
                                   : `+${med.gapFromPrevious} min wait`}
                               </span>
                             </div>
 
-                            <div className="flex items-center gap-2 flex-wrap">
+                            <div className="flex items-center gap-1.5 flex-wrap">
                               {COMMON_GAPS.map((gap) => (
                                 <button
                                   key={gap.value}
@@ -658,16 +655,16 @@ export const QuickRoutineModal: React.FC<QuickRoutineModalProps> = ({
                                   onClick={() =>
                                     handleMedicineChange(index, 'gapFromPrevious', gap.value)
                                   }
-                                  className={`px-2.5 py-1.5 rounded-lg text-xs transition-colors ${
+                                  className={`px-2.5 py-1 rounded-full text-[11px] transition-colors ${
                                     med.gapFromPrevious === gap.value
-                                      ? 'bg-teal-600 text-white font-bold shadow-xs'
-                                      : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700 hover:border-teal-500'
+                                      ? 'bg-[#007AFF] text-white font-semibold shadow-2xs'
+                                      : 'bg-[#F2F2F7] dark:bg-[#2C2C2E] text-[#8E8E93] hover:text-black dark:hover:text-white'
                                   }`}
                                 >
                                   {gap.label}
                                 </button>
                               ))}
-                              <div className="flex items-center gap-1.5 ml-auto">
+                              <div className="flex items-center gap-1 ml-auto">
                                 <input
                                   type="number"
                                   min="0"
@@ -680,9 +677,9 @@ export const QuickRoutineModal: React.FC<QuickRoutineModalProps> = ({
                                       Math.max(0, parseInt(e.target.value, 10) || 0)
                                     )
                                   }
-                                  className="w-14 px-2 py-1 text-xs text-center rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-mono"
+                                  className="w-12 px-2 py-0.5 text-xs text-center rounded-lg border border-[#E5E5EA] dark:border-[#2C2C2E] bg-[#F2F2F7] dark:bg-[#2C2C2E] font-mono text-black dark:text-white"
                                 />
-                                <span className="text-[11px] text-slate-400">min</span>
+                                <span className="text-[11px] text-[#8E8E93]">min</span>
                               </div>
                             </div>
                           </div>
@@ -694,35 +691,38 @@ export const QuickRoutineModal: React.FC<QuickRoutineModalProps> = ({
               </div>
 
               {/* 5. Live Visual Pipeline Preview */}
-              <div className="p-4 sm:p-5 rounded-2xl bg-teal-50/60 dark:bg-teal-950/40 border border-teal-200/60 dark:border-teal-900/40 space-y-2.5">
-                <span className="text-xs font-bold text-teal-900 dark:text-teal-200 block">
-                  Regimen Timeline Preview:
+              <div className="p-3.5 rounded-2xl bg-[#F2F2F7] dark:bg-[#2C2C2E]/60 border border-[#E5E5EA] dark:border-[#2C2C2E] space-y-2">
+                <span className="text-[12px] font-semibold text-black dark:text-white block">
+                  Sequence Preview:
                 </span>
-                <div className="flex items-center gap-2.5 overflow-x-auto pb-1 text-xs">
+                <div className="flex items-center gap-2 overflow-x-auto pb-1 text-xs">
                   {medicines.map((m, idx) => {
                     const offset = stepOffsets[idx];
                     const calculatedTime = addMinutesToTime(primaryStartTime, offset);
                     return (
                       <React.Fragment key={idx}>
-                        <div className="shrink-0 p-2.5 rounded-xl bg-white dark:bg-slate-900 border border-teal-200 dark:border-teal-800 text-center min-w-[100px] shadow-xs">
-                          <span className="text-[10px] font-bold text-teal-600 dark:text-teal-400 block">
+                        <div className="shrink-0 p-2 rounded-xl bg-white dark:bg-[#1C1C1E] border border-[#E5E5EA] dark:border-[#2C2C2E] text-center min-w-[95px] shadow-2xs">
+                          <span className="text-[10px] font-semibold text-[#007AFF] block">
                             Step {idx + 1}
                           </span>
-                          <span className="font-bold text-slate-900 dark:text-white truncate block text-[11px]">
+                          <span className="font-semibold text-black dark:text-white truncate block text-[12px]">
                             {m.name || `Pill ${idx + 1}`}
                           </span>
-                          <span className="text-[10px] font-mono text-slate-500 dark:text-slate-400">
+                          <span className="text-[11px] font-mono text-[#8E8E93]">
                             {formatTime12h(calculatedTime)}
                           </span>
                         </div>
                         {idx < medicines.length - 1 && (
                           <div className="shrink-0 flex flex-col items-center">
-                            <span className="text-[10px] font-bold text-teal-600 dark:text-teal-400">
+                            <span
+                              className="text-[10px] font-semibold"
+                              style={{ color: 'var(--app-accent, #007AFF)' }}
+                            >
                               {medicines[idx + 1].gapFromPrevious === 0
                                 ? '+0m'
                                 : `+${medicines[idx + 1].gapFromPrevious}m`}
                             </span>
-                            <ArrowRight className="w-3.5 h-3.5 text-teal-400" />
+                            <ArrowRight className="w-3 h-3 text-[#8E8E93]" />
                           </div>
                         )}
                       </React.Fragment>
@@ -732,20 +732,21 @@ export const QuickRoutineModal: React.FC<QuickRoutineModalProps> = ({
               </div>
 
               {/* Submit & Cancel Actions */}
-              <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-end gap-3 shrink-0">
+              <div className="pt-3 border-t border-[#E0E3E7] dark:border-[#3C4043] flex items-center justify-end gap-2.5 shrink-0">
                 <button
                   type="button"
                   onClick={onClose}
-                  className="py-2.5 px-4 text-xs font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors min-h-[42px]"
+                  className="px-5 py-2.5 text-[13px] font-medium text-[#444746] dark:text-[#9AA0A6] hover:bg-[#F0F4F9] dark:hover:bg-[#282A2C] rounded-full transition-colors cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="py-2.5 px-5 bg-teal-600 hover:bg-teal-700 text-white font-semibold text-xs rounded-xl shadow-xs hover:shadow-teal-500/20 transition-all flex items-center gap-1.5 min-h-[42px]"
+                  className="px-6 py-2.5 text-white font-medium text-[13px] rounded-full shadow-xs transition-all flex items-center gap-1.5 active:scale-95 cursor-pointer"
+                  style={{ backgroundColor: 'var(--app-accent, #1A73E8)' }}
                 >
-                  <Check className="w-4 h-4" />
-                  Create Routine Stack
+                  <Check className="w-3.5 h-3.5 stroke-[2.5]" />
+                  Save Routine
                 </button>
               </div>
             </form>

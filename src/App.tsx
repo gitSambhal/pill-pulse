@@ -621,7 +621,7 @@ export default function App() {
   const pendingDosesCount = doses.filter((d) => d.status === 'pending').length;
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col transition-colors duration-200">
+    <div className="min-h-screen bg-[#F2F2F7] dark:bg-[#000000] text-black dark:text-white flex flex-col transition-colors duration-200">
       {/* Toast System */}
       <ToastContainer toasts={toasts} onDismiss={removeToast} />
 
@@ -637,7 +637,7 @@ export default function App() {
       />
 
       {/* Main Content Area */}
-      <main className="flex-1 max-w-xl w-full mx-auto px-4 sm:px-6 pt-4 pb-28 sm:pb-32">
+      <main className="flex-1 max-w-2xl w-full mx-auto px-4 sm:px-6 pt-5 pb-32 sm:pb-36">
         {isLoading ? (
           <SkeletonLoader />
         ) : (

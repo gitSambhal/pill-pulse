@@ -4,6 +4,8 @@
  */
 
 import { useEffect, useState } from 'react';
+import { ThemeColor } from '../types';
+import { THEME_COLORS } from '../utils/themeColors';
 
 type Theme = 'light' | 'dark';
 
@@ -35,6 +37,19 @@ export function useTheme() {
     }
   });
 
+  const [themeColor, setThemeColorState] = useState<ThemeColor>(() => {
+    try {
+      const saved = localStorage.getItem('pillpulse_accent_color_v1') as ThemeColor;
+      if (saved && THEME_COLORS[saved]) {
+        return saved;
+      }
+      return 'blue';
+    } catch {
+      return 'blue';
+    }
+  });
+
+  // Apply light/dark class
   useEffect(() => {
     const root = document.documentElement;
     if (theme === 'dark') {
@@ -51,9 +66,43 @@ export function useTheme() {
     }
   }, [theme]);
 
+  // Apply theme accent color to root CSS variables
+  useEffect(() => {
+    const root = document.documentElement;
+    const config = THEME_COLORS[themeColor] || THEME_COLORS.blue;
+    const isDark = theme === 'dark';
+
+    root.style.setProperty('--app-accent', isDark ? config.primaryDark : config.primary);
+    root.style.setProperty('--app-accent-hover', config.hover);
+    root.style.setProperty('--app-accent-subtle', isDark ? config.subtleDark : config.subtleLight);
+    root.style.setProperty('--app-accent-ring', config.ring);
+
+    // Also update meta theme-color for mobile address bar
+    const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+    if (metaThemeColor) {
+      metaThemeColor.setAttribute('content', isDark ? '#000000' : '#FFFFFF');
+    }
+
+    try {
+      localStorage.setItem('pillpulse_accent_color_v1', themeColor);
+    } catch {
+      // ignore
+    }
+  }, [themeColor, theme]);
+
   const toggleTheme = () => {
     setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
   };
 
-  return { theme, toggleTheme, isDark: theme === 'dark' };
+  const setThemeColor = (newColor: ThemeColor) => {
+    setThemeColorState(newColor);
+  };
+
+  return {
+    theme,
+    toggleTheme,
+    isDark: theme === 'dark',
+    themeColor,
+    setThemeColor,
+  };
 }

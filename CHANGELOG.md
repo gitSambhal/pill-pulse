@@ -5,6 +5,36 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 
 ---
 
+## [v1.6.0] - 2026-09-24
+
+### Changed & Redesigned
+- **Google Product & Material Design 3 (M3) UI Transformation**:
+  - **Google Product App Bar (`Navbar.tsx`)**: Modeled after Google Health / Google Workspace with Google's 4-color branding motif (Blue `#4285F4`, Red `#EA4335`, Yellow `#FBBC04`, Green `#34A853`), active sync indicator, theme switch, sound preset trigger, and Google Account profile avatar with dropdown.
+  - **Material 3 Navigation Bar & Floating Action Button (`BottomNav.tsx`)**: Rebuilt the navigation bar with Material 3 active pill indicators (`rounded-full py-1 px-4.5 bg-[var(--app-accent-subtle)] text-[var(--app-accent)]`), accompanied by a center elevated Google Floating Action Button (FAB) for quick routine creation.
+  - **Google Calendar Date Navigator (`DateNavigator.tsx`)**: Styled directly like Google Calendar with monthly header, "Today" quick jump button, and a 7-day strip with circular active day highlighting, date adherence dots, and month/year selector.
+  - **Google "At-a-Glance" Next Up Banner (`NextUpBanner.tsx`)**: Overhauled into a Material 3 Elevated Card featuring Google progress tracks, prominent time badges, and filled action buttons.
+  - **Google Health Dashboard & Medication Cards (`TodayView.tsx`, `MedicineListView.tsx`, `RoutineManagerView.tsx`, `AdherenceView.tsx`)**: Redesigned all card containers to Material 3 elevated surface tokens (`rounded-[24px] bg-[#FFFFFF] dark:bg-[#1E1F20] border-[#E0E3E7] dark:border-[#3C4043]`), Material 3 switches, and Google Search bar with pill shape.
+  - **Material 3 Dialogs & Modals (`AddMedicineModal.tsx`, `QuickRoutineModal.tsx`, `SettingsModal.tsx`, `ActiveAlarmModal.tsx`, `ConfirmModal.tsx`, `WhatIsNewModal.tsx`)**: Transformed all modals into Material Design 3 dialogs (`rounded-[28px]`, M3 text fields, filled pill buttons, and tonal chips).
+  - **Google Sans Typography & Material 3 Palette**: Configured Google Sans font hierarchy, standard weights (400, 500, 700), and Material You color palettes.
+
+---
+
+## [v1.5.3] - 2026-09-24
+
+### Changed & Redesigned
+- **Apple Human Interface Guidelines (HIG) UI/UX Overhaul (No Glass UI)**:
+  - **Zero Glass / Zero Blur Discipline**: Eliminated all semi-transparent frosted glass, blur filters, and diffuse backdrops. Replaced with pure, solid Apple surfaces (`#FFFFFF` in light mode, `#1C1C1E` in dark mode) and subtle hairline borders (`#E5E5EA` / `#2C2C2E`).
+  - **Apple System Palette & Typography**: Adopted Apple San Francisco font stack with system tints: Apple Blue (`#007AFF`), Apple Green (`#34C759`), Apple Orange (`#FF9500`), Apple Red (`#FF3B30`), Apple Indigo (`#5856D6`), and Apple System Gray (`#8E8E93`).
+  - **Modal & Popup Architecture**:
+    - `AddMedicineModal`: Redesigned as an Apple modal sheet with solid container, circular action buttons, Apple segmented pill shape selectors, and rounded-full primary actions.
+    - `QuickRoutineModal`: Rebuilt with Apple Inset Grouped cards, clean native time inputs, preset cards, and pill sequence pipeline.
+    - `ActiveAlarmModal`: Overhauled to Apple Watch / iOS alarm alert style with solid background, circular mute control, and prominent green completion button.
+    - `ConfirmModal`: Modeled after iOS system action sheets with centered layout and tactile rounded-full buttons.
+    - `WhatIsNewModal`: Apple "What's New in Health" feature presentation style.
+  - **Adherence & History View**: Redesigned to Apple Health Trends style with solid metric cards, circular badges, and Inset Grouped daily records.
+
+---
+
 ## [v1.5.2] - 2026-09-24
 
 ### Changed & Refined

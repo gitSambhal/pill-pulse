@@ -1,5 +1,5 @@
 /**
- * PillPulse - Schedule & Dashboard View with Upcoming & Taken Today Breakdown
+ * PillPulse - Google Health Schedule & Dashboard View
  * Developer: Suhail Akhtar (https://suhail.top)
  */
 
@@ -14,29 +14,24 @@ import {
   Check,
   RotateCcw,
   FastForward,
-  CalendarCheck2,
-  CheckCheck,
-  AlertCircle,
-  Calendar,
   Hourglass,
-  Flame,
   Sunrise,
   Sun,
   Sunset,
   Moon,
+  Info,
 } from 'lucide-react';
-import { ScheduledDose, TimeSlot } from '../../types';
+import { ScheduledDose } from '../../types';
 import {
   formatTime12h,
   getPillColorClasses,
-  getSlotLabel,
   isToday,
   isPastDate,
   isFutureDate,
 } from '../../utils';
 import { NextUpBanner } from '../../components/NextUpBanner';
 import { DateNavigator } from '../../components/DateNavigator';
-import { SlotTimingBadge, getSlotIcon } from '../../components/SlotTimingBadge';
+import { SlotTimingBadge } from '../../components/SlotTimingBadge';
 
 interface TodayViewProps {
   selectedDate: string;
@@ -136,10 +131,9 @@ export const TodayView: React.FC<TodayViewProps> = ({
     { id: 'night', label: 'Night', icon: <Moon className="w-3.5 h-3.5 text-indigo-400" /> },
   ];
 
-  // Helper to render a single dose card
+  // Helper to render a single Google M3 dose card
   const renderDoseCard = (dose: ScheduledDose) => {
     const isTaken = dose.status === 'taken';
-    const isPending = dose.status === 'pending';
     const isSnoozed = dose.status === 'snoozed';
     const isSkipped = dose.status === 'skipped';
     const colorStyle = getPillColorClasses(dose.color);
@@ -150,76 +144,80 @@ export const TodayView: React.FC<TodayViewProps> = ({
     return (
       <div
         key={dose.id}
-        className={`p-5 rounded-3xl border transition-all ${
+        className={`p-4 sm:p-4.5 rounded-[22px] border transition-all ${
           isTargetOfCountdown
-            ? 'border-teal-500 ring-2 ring-teal-500/30 bg-teal-50/40 dark:bg-teal-950/30 shadow-md'
+            ? 'border-[var(--app-accent,#1A73E8)] ring-2 ring-[var(--app-accent-subtle,#E8F0FE)] bg-white dark:bg-[#1E1F20] shadow-sm'
             : isTaken
-            ? 'bg-slate-50/70 dark:bg-slate-900/40 border-slate-200/50 dark:border-slate-800/50'
-            : 'bg-white dark:bg-slate-900 border-slate-200/80 dark:border-slate-800/80 shadow-xs hover:border-slate-300 dark:hover:border-slate-700'
+            ? 'bg-[#F8F9FA]/80 dark:bg-[#18191A] border-[#E0E3E7]/80 dark:border-[#3C4043]/80 opacity-90'
+            : 'bg-white dark:bg-[#1E1F20] border-[#E0E3E7] dark:border-[#3C4043] shadow-2xs hover:shadow-xs hover:border-[#C4C7C5] dark:hover:border-[#5E6368]'
         }`}
       >
-        <div className="flex items-start justify-between gap-3.5">
+        <div className="flex items-start justify-between gap-3">
           {/* Left pill indicator & details */}
-          <div className="flex items-start gap-3.5 min-w-0">
+          <div className="flex items-start gap-3 min-w-0">
             <div
-              className={`w-11 h-11 rounded-2xl flex items-center justify-center shrink-0 shadow-xs ${colorStyle.bg} ${colorStyle.text} border ${colorStyle.border}`}
+              className={`w-10 h-10 rounded-[14px] flex items-center justify-center shrink-0 ${colorStyle.bg} ${colorStyle.text} border ${colorStyle.border}`}
             >
               <Pill className="w-5 h-5 -rotate-45" />
             </div>
 
             <div className="min-w-0">
               {/* Timing Slot & Routine step badge */}
-              <div className="flex items-center gap-2 mb-1.5 flex-wrap">
+              <div className="flex items-center gap-1.5 mb-1 flex-wrap">
                 <SlotTimingBadge slot={dose.slot} size="xs" />
 
                 {dose.routineName && (
-                  <span className="text-[10px] font-semibold text-teal-600 dark:text-teal-400 bg-teal-50 dark:bg-teal-950/60 px-2 py-0.5 rounded-md">
+                  <span
+                    className="text-[11px] font-medium px-2 py-0.5 rounded-full"
+                    style={{
+                      color: 'var(--app-accent, #1A73E8)',
+                      backgroundColor: 'var(--app-accent-subtle, #E8F0FE)',
+                    }}
+                  >
                     Step {dose.stepIndex} of {dose.totalSteps}
                   </span>
                 )}
                 {dose.nextStepGapMinutes !== undefined && (
-                  <span className="text-[10px] text-slate-400 dark:text-slate-500">
+                  <span className="text-[11px] text-[#444746] dark:text-[#9AA0A6]">
                     {dose.nextStepGapMinutes === 0
-                      ? '· Together (0m)'
+                      ? '· Together'
                       : `· +${dose.nextStepGapMinutes}m gap`}
                   </span>
                 )}
                 {isTargetOfCountdown && (
-                  <span className="text-[10px] font-bold text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/60 px-2 py-0.5 rounded-md animate-pulse">
-                    {activeStepCountdown
-                      ? `${Math.ceil(activeStepCountdown.totalSeconds / 60)}m Gap Active · Take Anytime`
-                      : 'Gap Active · Take Anytime'}
+                  <span className="text-[11px] font-medium text-[#B06000] dark:text-[#FBBC04] bg-[#FEF7E0] dark:bg-[#FBBC04]/15 px-2 py-0.5 rounded-full">
+                    Interval Active
                   </span>
                 )}
               </div>
 
               <h3
-                className={`text-base font-bold tracking-tight truncate ${
+                className={`text-[16px] sm:text-[17px] font-medium tracking-normal truncate ${
                   isTaken
-                    ? 'line-through text-slate-400 dark:text-slate-500'
-                    : 'text-slate-900 dark:text-white'
+                    ? 'line-through text-[#444746] dark:text-[#9AA0A6]'
+                    : 'text-[#1F1F1F] dark:text-[#E3E3E3]'
                 }`}
               >
                 {dose.medicineName}
               </h3>
 
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+              <p className="text-[13px] text-[#444746] dark:text-[#9AA0A6] mt-0.5">
                 {dose.dosage}
                 {dose.instructions ? ` · ${dose.instructions}` : ''}
               </p>
 
               {/* Time & status text */}
-              <div className="flex items-center gap-2 mt-2 text-xs font-mono font-medium text-slate-600 dark:text-slate-300 flex-wrap">
+              <div className="flex items-center gap-2 mt-2 text-xs font-medium text-[#444746] dark:text-[#9AA0A6] flex-wrap">
                 {!isTaken ? (
                   <label
-                    className="relative inline-flex items-center gap-1.5 cursor-pointer bg-slate-100 dark:bg-slate-800 hover:bg-teal-50 dark:hover:bg-teal-950/60 px-2.5 py-1 rounded-lg transition-colors border border-transparent hover:border-teal-200 dark:hover:border-teal-800 shadow-xs"
-                    title="Tap to change scheduled time"
+                    className="relative inline-flex items-center gap-1.5 cursor-pointer bg-[#F0F4F9] dark:bg-[#282A2C] hover:bg-[#E0E3E7] dark:hover:bg-[#3C4043] px-3 py-1 rounded-full transition-colors border border-transparent"
+                    title="Tap to adjust scheduled time"
                   >
-                    <Clock className="w-3.5 h-3.5 text-teal-500 pointer-events-none" />
-                    <span className="font-semibold text-slate-700 dark:text-slate-200">
+                    <Clock className="w-3.5 h-3.5 pointer-events-none" style={{ color: 'var(--app-accent, #1A73E8)' }} />
+                    <span className="font-medium text-[#1F1F1F] dark:text-[#E3E3E3]">
                       {formatTime12h(dose.scheduledTime)}
                     </span>
-                    <span className="text-[10px] text-teal-600 dark:text-teal-400 underline font-sans ml-0.5">
+                    <span className="text-[11px] font-medium ml-0.5" style={{ color: 'var(--app-accent, #1A73E8)' }}>
                       Edit
                     </span>
                     <input
@@ -230,25 +228,25 @@ export const TodayView: React.FC<TodayViewProps> = ({
                     />
                   </label>
                 ) : (
-                  <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-lg bg-slate-100/60 dark:bg-slate-800/40">
-                    <Clock className="w-3.5 h-3.5 text-teal-500" />
+                  <div className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#E6F4EA] dark:bg-[#0D652D]/30 text-[#1E8E3E] dark:text-[#81C995]">
+                    <Clock className="w-3.5 h-3.5" />
                     <span>{formatTime12h(dose.scheduledTime)}</span>
                   </div>
                 )}
                 {isSnoozed && (
-                  <span className="text-[11px] text-amber-500 font-sans font-semibold">
+                  <span className="text-[11px] text-[#B06000] dark:text-[#FBBC04] font-medium">
                     (Snoozed)
                   </span>
                 )}
                 {isSkipped && (
-                  <span className="text-[11px] text-rose-500 font-sans font-semibold">
+                  <span className="text-[11px] text-[#EA4335] font-medium">
                     (Skipped)
                   </span>
                 )}
                 {isTaken && dose.takenAt && (
-                  <span className="text-[11px] text-emerald-600 dark:text-emerald-400 font-sans font-medium flex items-center gap-1">
+                  <span className="text-[11px] text-[#1E8E3E] dark:text-[#81C995] font-medium flex items-center gap-1">
                     <Check className="w-3 h-3" />
-                    Taken {formatTime12h(new Date(dose.takenAt).toTimeString().slice(0, 5))}
+                    Logged {formatTime12h(new Date(dose.takenAt).toTimeString().slice(0, 5))}
                   </span>
                 )}
               </div>
@@ -256,61 +254,61 @@ export const TodayView: React.FC<TodayViewProps> = ({
           </div>
 
           {/* Right Action buttons */}
-          <div className="flex flex-col items-end gap-2 shrink-0">
+          <div className="flex flex-col items-end gap-1.5 shrink-0">
             {isTaken ? (
-              <div className="flex flex-col items-end gap-1.5">
-                <span className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/50 px-3 py-1.5 rounded-xl">
+              <div className="flex flex-col items-end gap-1">
+                <span className="inline-flex items-center gap-1 text-[12px] font-medium text-[#1E8E3E] dark:text-[#81C995] bg-[#E6F4EA] dark:bg-[#0D652D]/30 px-3 py-1 rounded-full">
                   <Check className="w-3.5 h-3.5 stroke-[2.5]" /> Taken
                 </span>
-                {/* Undo button to mark back to pending if needed */}
+                {/* Undo button */}
                 <button
                   onClick={() => onUndoDose(dose)}
-                  className="text-[11px] text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 flex items-center gap-1 transition-colors px-1.5 py-0.5 rounded"
-                  title="Revert status to pending"
+                  className="text-[11px] text-[#444746] dark:text-[#9AA0A6] hover:text-[#1F1F1F] dark:hover:text-[#E3E3E3] flex items-center gap-1 transition-colors px-1 py-0.5 cursor-pointer"
+                  title="Undo mark as taken"
                 >
                   <RotateCcw className="w-2.5 h-2.5" /> Undo
                 </button>
               </div>
             ) : (
               <div className="flex items-center gap-1.5">
-                {/* Ring preview (only on today) */}
+                {/* Chime ring preview (only on today) */}
                 {isViewingToday && (
                   <button
                     onClick={() => onTriggerAlarmNow(dose)}
-                    className="p-2 text-slate-400 hover:text-teal-600 dark:hover:text-teal-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors"
-                    title="Ring alarm sound now"
+                    className="w-8.5 h-8.5 rounded-full hover:bg-[#F0F4F9] dark:hover:bg-[#282A2C] transition-colors flex items-center justify-center cursor-pointer text-[#444746] dark:text-[#C4C7C5]"
+                    title="Ring alarm chime now"
                   >
                     <Volume2 className="w-4 h-4" />
                   </button>
                 )}
 
-                {/* Primary Take button: User can ALWAYS mark taken immediately, even during gaps! */}
+                {/* Google Material 3 Primary Take button */}
                 <button
                   onClick={() => onTakeDose(dose)}
-                  className={`py-2 px-3.5 font-semibold text-xs rounded-xl shadow-xs transition-all flex items-center gap-1.5 active:scale-95 min-h-[38px] ${
-                    isTargetOfCountdown
-                      ? 'bg-amber-500 hover:bg-amber-600 text-white animate-pulse'
-                      : 'bg-teal-600 hover:bg-teal-700 text-white'
-                  }`}
-                  title="Mark this medicine as taken"
+                  className="py-1.5 px-4 font-medium text-[13px] rounded-full shadow-xs transition-all flex items-center gap-1.5 active:scale-95 text-white cursor-pointer"
+                  style={{
+                    backgroundColor: isTargetOfCountdown ? '#B06000' : 'var(--app-accent, #1A73E8)',
+                  }}
+                  title="Mark medicine as taken"
                 >
-                  <CheckCircle2 className="w-4 h-4" />
+                  <CheckCircle2 className="w-3.5 h-3.5" />
                   {isTargetOfCountdown ? 'Take Early' : 'Take'}
                 </button>
               </div>
             )}
 
             {!isTaken && isViewingToday && (
-              <div className="flex items-center gap-2.5 pt-0.5">
+              <div className="flex items-center gap-2 pt-0.5">
                 <button
                   onClick={() => onSnoozeDose(dose, 5)}
-                  className="text-[11px] text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 px-1 py-0.5"
+                  className="text-[11px] text-[#444746] dark:text-[#9AA0A6] hover:underline px-1 py-0.5 cursor-pointer"
+                  style={{ color: 'var(--app-accent, #1A73E8)' }}
                 >
                   Snooze
                 </button>
                 <button
                   onClick={() => onSkipDose(dose)}
-                  className="text-[11px] text-slate-400 hover:text-rose-500 dark:hover:text-rose-400 px-1 py-0.5"
+                  className="text-[11px] text-[#444746] dark:text-[#9AA0A6] hover:text-[#EA4335] px-1 py-0.5 cursor-pointer"
                 >
                   Skip
                 </button>
@@ -321,15 +319,16 @@ export const TodayView: React.FC<TodayViewProps> = ({
 
         {/* Take entire routine stack shortcut if multi-pill sequence */}
         {!isTaken && canTakeEntireRoutine && dose.stepIndex === 1 && (
-          <div className="mt-3.5 pt-3 border-t border-slate-100 dark:border-slate-800/70 flex items-center justify-between text-xs">
-            <span className="text-[11px] text-slate-500 dark:text-slate-400">
-              Taking all {routineInfo.totalCount} pills together?
+          <div className="mt-3 pt-2.5 border-t border-[#E0E3E7] dark:border-[#3C4043] flex items-center justify-between text-xs">
+            <span className="text-[12px] text-[#444746] dark:text-[#9AA0A6]">
+              Taking all {routineInfo.totalCount} medicines in this routine together?
             </span>
             <button
               onClick={() => onTakeEntireRoutine(dose.routineId!)}
-              className="text-[11px] font-semibold text-teal-600 dark:text-teal-400 hover:underline flex items-center gap-1.5"
+              className="text-[12px] font-medium hover:underline flex items-center gap-1 cursor-pointer"
+              style={{ color: 'var(--app-accent, #1A73E8)' }}
             >
-              <FastForward className="w-3 h-3" /> Mark Entire Stack Taken
+              <FastForward className="w-3.5 h-3.5" /> Mark All Taken
             </button>
           </div>
         )}
@@ -338,8 +337,8 @@ export const TodayView: React.FC<TodayViewProps> = ({
   };
 
   return (
-    <div className="space-y-5 sm:space-y-6">
-      {/* 1. Interactive Date Navigator: Safe native calendar picker + week strip */}
+    <div className="space-y-4">
+      {/* 1. Google Calendar Interactive Date Navigator */}
       <DateNavigator
         selectedDate={selectedDate}
         onSelectDate={onSelectDate}
@@ -358,52 +357,52 @@ export const TodayView: React.FC<TodayViewProps> = ({
         />
       )}
 
-      {/* 3. Dashboard Metrics Cards: Upcoming Meds & Taken Today */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-4">
+      {/* 3. Google Health Dashboard Metric Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         {/* Upcoming Meds Card */}
         <div
           onClick={() => setStatusFilter(statusFilter === 'upcoming' ? 'all' : 'upcoming')}
-          className={`p-4 sm:p-5 rounded-3xl border transition-all cursor-pointer select-none space-y-2 ${
+          className={`p-4 sm:p-4.5 rounded-[24px] border transition-all cursor-pointer select-none space-y-1.5 ${
             statusFilter === 'upcoming'
-              ? 'bg-teal-50/80 dark:bg-teal-950/40 border-teal-500 ring-2 ring-teal-500/20 shadow-xs'
-              : 'bg-white dark:bg-slate-900 border-slate-200/80 dark:border-slate-800/80 shadow-xs hover:border-teal-500/50'
+              ? 'bg-white dark:bg-[#1E1F20] border-[var(--app-accent,#1A73E8)] ring-2 ring-[var(--app-accent-subtle,#E8F0FE)] shadow-xs'
+              : 'bg-white dark:bg-[#1E1F20] border-[#E0E3E7] dark:border-[#3C4043] shadow-xs hover:border-[#C4C7C5] dark:hover:border-[#5E6368]'
           }`}
         >
-          <div className="flex items-center justify-between mb-1">
+          <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <div className="p-2 rounded-xl bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400">
-                <Hourglass className="w-4 h-4" />
+              <div className="w-7 h-7 rounded-full bg-[#FEF7E0] dark:bg-[#FBBC04]/20 text-[#B06000] dark:text-[#FBBC04] flex items-center justify-center">
+                <Hourglass className="w-3.5 h-3.5" />
               </div>
-              <span className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
-                Upcoming Meds
+              <span className="text-[12px] font-medium text-[#444746] dark:text-[#9AA0A6]">
+                Upcoming
               </span>
             </div>
             <span
-              className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full ${
+              className={`text-[11px] font-medium px-2 py-0.5 rounded-full ${
                 pendingDoses.length > 0
-                  ? 'bg-amber-100 dark:bg-amber-950/70 text-amber-800 dark:text-amber-300'
-                  : 'bg-emerald-100 dark:bg-emerald-950/70 text-emerald-800 dark:text-emerald-300'
+                  ? 'bg-[#FEF7E0] dark:bg-[#FBBC04]/15 text-[#B06000] dark:text-[#FBBC04]'
+                  : 'bg-[#E6F4EA] dark:bg-[#0D652D]/30 text-[#1E8E3E] dark:text-[#81C995]'
               }`}
             >
-              {pendingDoses.length > 0 ? `${pendingDoses.length} Pending` : 'All Done 🎉'}
+              {pendingDoses.length > 0 ? `${pendingDoses.length} Pending` : 'All Done'}
             </span>
           </div>
 
           <div className="pt-1">
             {nextDose ? (
               <div>
-                <p className="text-sm font-bold text-slate-900 dark:text-white truncate">
+                <p className="text-[15px] font-medium text-[#1F1F1F] dark:text-[#E3E3E3] truncate">
                   {nextDose.medicineName} ({nextDose.dosage})
                 </p>
-                <p className="text-[11px] text-slate-500 dark:text-slate-400 flex items-center gap-1.5 mt-1.5 flex-wrap">
-                  <Clock className="w-3.5 h-3.5 text-teal-500 shrink-0" />
-                  <span>Scheduled for {formatTime12h(nextDose.scheduledTime)}</span>
+                <div className="text-[12px] text-[#444746] dark:text-[#9AA0A6] flex items-center gap-1.5 mt-1 flex-wrap">
+                  <Clock className="w-3 h-3 shrink-0" style={{ color: 'var(--app-accent, #1A73E8)' }} />
+                  <span>{formatTime12h(nextDose.scheduledTime)}</span>
                   <SlotTimingBadge slot={nextDose.slot} size="xs" />
-                </p>
+                </div>
               </div>
             ) : (
-              <p className="text-xs text-emerald-600 dark:text-emerald-400 font-medium">
-                No upcoming medicines pending for this date!
+              <p className="text-[13px] text-[#1E8E3E] dark:text-[#81C995] font-medium">
+                No upcoming medications pending for this date!
               </p>
             )}
           </div>
@@ -412,77 +411,77 @@ export const TodayView: React.FC<TodayViewProps> = ({
         {/* Taken Today Card */}
         <div
           onClick={() => setStatusFilter(statusFilter === 'taken' ? 'all' : 'taken')}
-          className={`p-4 sm:p-5 rounded-3xl border transition-all cursor-pointer select-none space-y-2 ${
+          className={`p-4 sm:p-4.5 rounded-[24px] border transition-all cursor-pointer select-none space-y-1.5 ${
             statusFilter === 'taken'
-              ? 'bg-emerald-50/80 dark:bg-emerald-950/40 border-emerald-500 ring-2 ring-emerald-500/20 shadow-xs'
-              : 'bg-white dark:bg-slate-900 border-slate-200/80 dark:border-slate-800/80 shadow-xs hover:border-emerald-500/50'
+              ? 'bg-white dark:bg-[#1E1F20] border-[#1E8E3E] ring-2 ring-[#E6F4EA] dark:ring-[#0D652D]/30 shadow-xs'
+              : 'bg-white dark:bg-[#1E1F20] border-[#E0E3E7] dark:border-[#3C4043] shadow-xs hover:border-[#C4C7C5] dark:hover:border-[#5E6368]'
           }`}
         >
-          <div className="flex items-center justify-between mb-1">
+          <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <div className="p-2 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400">
-                <CheckCheck className="w-4 h-4" />
+              <div className="w-7 h-7 rounded-full bg-[#E6F4EA] dark:bg-[#0D652D]/20 text-[#1E8E3E] dark:text-[#81C995] flex items-center justify-center">
+                <CheckCircle2 className="w-3.5 h-3.5" />
               </div>
-              <span className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
-                Taken Today
+              <span className="text-[12px] font-medium text-[#444746] dark:text-[#9AA0A6]">
+                Adherence Rate
               </span>
             </div>
-            <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/70 text-emerald-800 dark:text-emerald-300">
+            <span className="text-[11px] font-medium px-2 py-0.5 rounded-full bg-[#E6F4EA] dark:bg-[#0D652D]/30 text-[#1E8E3E] dark:text-[#81C995]">
               {takenDoses.length} of {doses.length} ({adherenceRate}%)
             </span>
           </div>
 
           <div className="pt-1">
-            {/* Progress Bar */}
-            <div className="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-2.5 mb-2 overflow-hidden">
+            {/* Google Linear Track */}
+            <div className="w-full bg-[#F0F4F9] dark:bg-[#282A2C] rounded-full h-2 mb-2 overflow-hidden">
               <div
-                className="bg-linear-to-r from-teal-500 to-emerald-500 h-full rounded-full transition-all duration-300"
+                className="bg-[#1E8E3E] dark:bg-[#81C995] h-full rounded-full transition-all duration-300"
                 style={{ width: `${adherenceRate}%` }}
               />
             </div>
 
-            <p className="text-[11px] text-slate-500 dark:text-slate-400 truncate">
+            <p className="text-[12px] text-[#444746] dark:text-[#9AA0A6] truncate">
               {lastTakenDose
-                ? `Last taken: ${lastTakenDose.medicineName} (${formatTime12h(
+                ? `Last: ${lastTakenDose.medicineName} (${formatTime12h(
                     lastTakenDose.takenAt
                       ? new Date(lastTakenDose.takenAt).toTimeString().slice(0, 5)
                       : lastTakenDose.scheduledTime
                   )})`
-                : 'No medicines marked taken yet today'}
+                : 'No medications recorded yet'}
             </p>
           </div>
         </div>
       </div>
 
-      {/* 4. Dashboard Status Filter Tabs */}
+      {/* 4. Google Material 3 Filter Chips for Status */}
       <div className="flex items-center justify-between gap-3 pt-1">
-        <div className="flex items-center gap-1.5 p-1 bg-slate-100 dark:bg-slate-800/70 rounded-2xl">
+        <div className="flex items-center gap-1.5 p-1 bg-[#F0F4F9] dark:bg-[#282A2C] rounded-full flex-1 max-w-sm">
           <button
             onClick={() => setStatusFilter('all')}
-            className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all ${
+            className={`flex-1 py-1.5 text-[12px] font-medium rounded-full transition-all text-center cursor-pointer ${
               statusFilter === 'all'
-                ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-xs'
-                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                ? 'bg-white dark:bg-[#3C4043] text-[#1F1F1F] dark:text-[#E3E3E3] shadow-xs'
+                : 'text-[#444746] dark:text-[#9AA0A6] hover:text-black dark:hover:text-white'
             }`}
           >
             All ({doses.length})
           </button>
           <button
             onClick={() => setStatusFilter('upcoming')}
-            className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all flex items-center gap-1 ${
+            className={`flex-1 py-1.5 text-[12px] font-medium rounded-full transition-all text-center cursor-pointer ${
               statusFilter === 'upcoming'
-                ? 'bg-white dark:bg-slate-900 text-amber-600 dark:text-amber-400 shadow-xs'
-                : 'text-slate-600 dark:text-slate-400 hover:text-amber-600'
+                ? 'bg-white dark:bg-[#3C4043] text-[#B06000] dark:text-[#FBBC04] shadow-xs'
+                : 'text-[#444746] dark:text-[#9AA0A6] hover:text-[#B06000]'
             }`}
           >
             Upcoming ({pendingDoses.length})
           </button>
           <button
             onClick={() => setStatusFilter('taken')}
-            className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all flex items-center gap-1 ${
+            className={`flex-1 py-1.5 text-[12px] font-medium rounded-full transition-all text-center cursor-pointer ${
               statusFilter === 'taken'
-                ? 'bg-white dark:bg-slate-900 text-emerald-600 dark:text-emerald-400 shadow-xs'
-                : 'text-slate-600 dark:text-slate-400 hover:text-emerald-600'
+                ? 'bg-white dark:bg-[#3C4043] text-[#1E8E3E] dark:text-[#81C995] shadow-xs'
+                : 'text-[#444746] dark:text-[#9AA0A6] hover:text-[#1E8E3E]'
             }`}
           >
             Taken ({takenDoses.length})
@@ -491,24 +490,35 @@ export const TodayView: React.FC<TodayViewProps> = ({
 
         <button
           onClick={onOpenQuickRoutine}
-          className="inline-flex items-center gap-1.5 text-xs font-semibold text-teal-600 dark:text-teal-400 hover:underline shrink-0 px-2 py-1 rounded-lg hover:bg-teal-50 dark:hover:bg-teal-950/50 transition-colors"
+          className="inline-flex items-center gap-1 text-[13px] font-medium hover:underline shrink-0 px-2 py-1 cursor-pointer"
+          style={{ color: 'var(--app-accent, #1A73E8)' }}
         >
-          <Layers className="w-3.5 h-3.5" />
-          + Stack
+          <Layers className="w-4 h-4" />
+          + Routine
         </button>
       </div>
 
-      {/* 5. Slot Filter Buttons */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-1.5 scrollbar-none">
+      {/* 5. Google Material 3 Time Slot Filter Chips */}
+      <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
         {slots.map((s) => (
           <button
             key={s.id}
             onClick={() => setSelectedSlot(s.id)}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-medium transition-all whitespace-nowrap inline-flex items-center gap-1.5 ${
+            className={`px-3.5 py-1.5 rounded-full text-[12px] font-medium transition-all whitespace-nowrap inline-flex items-center gap-1.5 active:scale-95 cursor-pointer ${
               selectedSlot === s.id
-                ? 'bg-teal-600 text-white shadow-xs font-semibold scale-102'
-                : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 border border-slate-200/70 dark:border-slate-800/70 hover:bg-slate-50 dark:hover:bg-slate-800'
+                ? 'shadow-xs'
+                : 'bg-white dark:bg-[#1E1F20] text-[#444746] dark:text-[#9AA0A6] border border-[#E0E3E7] dark:border-[#3C4043] hover:text-[#1F1F1F] dark:hover:text-[#E3E3E3]'
             }`}
+            style={
+              selectedSlot === s.id
+                ? {
+                    backgroundColor: 'var(--app-accent-subtle, #E8F0FE)',
+                    color: 'var(--app-accent, #1A73E8)',
+                    borderColor: 'var(--app-accent, #1A73E8)',
+                    borderWidth: '1px',
+                  }
+                : undefined
+            }
           >
             {s.icon}
             <span>{s.label}</span>
@@ -516,20 +526,20 @@ export const TodayView: React.FC<TodayViewProps> = ({
         ))}
       </div>
 
-      {/* 6. Main Doses List: Grouped by Upcoming & Taken */}
-      <div className="space-y-5">
+      {/* 6. Main Medication Doses List */}
+      <div className="space-y-4">
         {/* If user selected "all", render explicit grouped sections */}
         {statusFilter === 'all' && (
           <>
             {/* Upcoming Section */}
             {pendingDoses.length > 0 && (
-              <div className="space-y-3">
+              <div className="space-y-2.5">
                 <div className="flex items-center justify-between px-1">
-                  <span className="text-xs font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400 flex items-center gap-1.5">
+                  <span className="text-[12px] font-medium text-[#B06000] dark:text-[#FBBC04] flex items-center gap-1.5">
                     <Hourglass className="w-3.5 h-3.5" />
-                    Upcoming & Due ({pendingDoses.length})
+                    Due & Upcoming ({pendingDoses.length})
                   </span>
-                  <span className="text-[11px] text-slate-400 font-medium">Take anytime</span>
+                  <span className="text-[11px] text-[#444746] dark:text-[#9AA0A6]">Can take anytime</span>
                 </div>
                 {pendingDoses
                   .filter((d) => selectedSlot === 'all' || d.slot === selectedSlot)
@@ -539,13 +549,13 @@ export const TodayView: React.FC<TodayViewProps> = ({
 
             {/* Taken Today Section */}
             {takenDoses.length > 0 && (
-              <div className="space-y-3">
+              <div className="space-y-2.5">
                 <div className="flex items-center justify-between px-1">
-                  <span className="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
+                  <span className="text-[12px] font-medium text-[#1E8E3E] dark:text-[#81C995] flex items-center gap-1.5">
                     <CheckCircle2 className="w-3.5 h-3.5" />
-                    Taken Today ({takenDoses.length})
+                    Taken ({takenDoses.length})
                   </span>
-                  <span className="text-[11px] text-slate-400 font-medium">Logged</span>
+                  <span className="text-[11px] text-[#444746] dark:text-[#9AA0A6]">Recorded in history</span>
                 </div>
                 {takenDoses
                   .filter((d) => selectedSlot === 'all' || d.slot === selectedSlot)
@@ -555,11 +565,11 @@ export const TodayView: React.FC<TodayViewProps> = ({
 
             {/* Skipped Section */}
             {skippedDoses.length > 0 && (
-              <div className="space-y-3">
+              <div className="space-y-2.5">
                 <div className="flex items-center justify-between px-1">
-                  <span className="text-xs font-bold uppercase tracking-wider text-rose-500 flex items-center gap-1.5">
-                    <AlertCircle className="w-3.5 h-3.5" />
-                    Skipped Doses ({skippedDoses.length})
+                  <span className="text-[12px] font-medium text-[#EA4335] flex items-center gap-1.5">
+                    <Info className="w-3.5 h-3.5" />
+                    Skipped ({skippedDoses.length})
                   </span>
                 </div>
                 {skippedDoses
@@ -572,38 +582,47 @@ export const TodayView: React.FC<TodayViewProps> = ({
 
         {/* If user filtered specifically by upcoming or taken */}
         {statusFilter !== 'all' && (
-          <div className="space-y-3">
+          <div className="space-y-2.5">
             {filteredDoses.map(renderDoseCard)}
           </div>
         )}
 
         {/* Empty State */}
         {filteredDoses.length === 0 && (
-          <div className="text-center py-12 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/80 dark:border-slate-800/80 p-8 shadow-xs">
-            <Sparkles className="w-9 h-9 text-teal-500 mx-auto mb-3 opacity-70" />
-            <h3 className="text-base font-bold text-slate-900 dark:text-white">
+          <div className="text-center py-12 bg-white dark:bg-[#1E1F20] rounded-[24px] border border-[#E0E3E7] dark:border-[#3C4043] p-8 shadow-xs">
+            <div
+              className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3"
+              style={{
+                backgroundColor: 'var(--app-accent-subtle, #E8F0FE)',
+                color: 'var(--app-accent, #1A73E8)',
+              }}
+            >
+              <Sparkles className="w-6 h-6" />
+            </div>
+            <h3 className="text-[17px] font-medium text-[#1F1F1F] dark:text-[#E3E3E3]">
               {statusFilter === 'upcoming'
-                ? 'All Caught Up! No Upcoming Medicines.'
+                ? 'All Caught Up'
                 : statusFilter === 'taken'
-                ? 'No Medicines Taken Yet.'
+                ? 'No Medicines Taken Yet'
                 : isViewingPast
-                ? 'No Dose Records for this Past Date'
+                ? 'No Dose Records'
                 : isViewingFuture
-                ? 'No Scheduled Doses for this Future Date'
-                : 'No Doses Scheduled for this Filter'}
+                ? 'No Scheduled Doses'
+                : 'No Doses for this Filter'}
             </h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1.5 max-w-sm mx-auto mb-5 leading-relaxed">
+            <p className="text-[13px] text-[#444746] dark:text-[#9AA0A6] mt-1.5 max-w-sm mx-auto mb-5 leading-relaxed">
               {statusFilter === 'upcoming'
-                ? 'You have completed all scheduled doses for this selection. Great job!'
+                ? 'You have completed all scheduled medications for this selection.'
                 : statusFilter === 'taken'
                 ? 'Mark your upcoming doses as taken to see them logged here.'
-                : 'Add a single medicine or create a cascading routine stack to schedule your doses.'}
+                : 'Add a medication or create a routine to schedule your doses.'}
             </p>
             <button
               onClick={onOpenQuickRoutine}
-              className="py-2.5 px-5 bg-teal-600 hover:bg-teal-700 text-white font-semibold text-xs rounded-xl shadow-xs transition-colors min-h-[42px]"
+              className="py-2.5 px-5 text-white font-medium text-[13px] rounded-full shadow-xs transition-colors cursor-pointer active:scale-95"
+              style={{ backgroundColor: 'var(--app-accent, #1A73E8)' }}
             >
-              Add Cascading Routine
+              Add Routine
             </button>
           </div>
         )}

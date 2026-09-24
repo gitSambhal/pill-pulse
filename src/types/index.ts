@@ -75,6 +75,8 @@ export interface SlotTimeSettings {
   night: string; // e.g. "22:00"
 }
 
+export type ThemeColor = 'blue' | 'teal' | 'indigo' | 'purple' | 'emerald' | 'orange' | 'rose';
+
 export interface NotificationSettings {
   soundEnabled: boolean;
   soundPreset: SoundPreset;
@@ -83,6 +85,7 @@ export interface NotificationSettings {
   browserNotifications: boolean;
   vibrateEnabled: boolean;
   slotTimes?: SlotTimeSettings;
+  themeColor?: ThemeColor;
 }
 
 export interface ToastMessage {
