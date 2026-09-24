@@ -637,7 +637,7 @@ export default function App() {
       />
 
       {/* Main Content Area */}
-      <main className="flex-1 max-w-md w-full mx-auto px-3 sm:px-4 pt-3 pb-24">
+      <main className="flex-1 max-w-xl w-full mx-auto px-4 sm:px-6 pt-4 pb-28 sm:pb-32">
         {isLoading ? (
           <SkeletonLoader />
         ) : (

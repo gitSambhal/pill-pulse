@@ -5,6 +5,37 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 
 ---
 
+## [v1.5.2] - 2026-09-24
+
+### Changed & Refined
+- **Universal UI Spacing & Popup Ergonomics Overhaul**:
+  - **Popups & Modals**:
+    - `AddMedicineModal`: Standardized outer modal padding (`p-6 sm:p-7`), form spacing (`space-y-4.5`), button padding (`py-2.5 px-4`), nested container math, and visual separation between dosage and inventory fields.
+    - `QuickRoutineModal`: Improved wizard step layout, larger timeline preview cards (`p-4.5 rounded-2xl`), cleaner step badge padding, and balanced time preset chip spacing.
+    - `SettingsModal`: Enhanced section hierarchy, generous card padding (`p-4.5 sm:p-5 rounded-2xl`), clean slot timing grid, and accessible touch targets.
+    - `ActiveAlarmModal`: Refined dialog padding (`p-6 sm:p-7 rounded-3xl`), increased action button height (`min-h-[50px]`) and tactile touch feedback.
+    - `WhatIsNewModal` & `ConfirmModal`: Standardized padding and nested radius hierarchy.
+  - **Main Views & Dashboard Items**:
+    - `TodayView`: Increased dose card padding to `p-5 rounded-3xl`, deepened gap between icon and title (`gap-3.5`), expanded metrics card padding (`p-4 sm:p-5 rounded-3xl`), increased slot filter buttons padding (`px-3.5 py-1.5`), and increased section spacing (`space-y-5`).
+    - `MedicineListView`: Upgraded card padding to `p-4 sm:p-5 rounded-3xl`, expanded search bar padding (`px-4 py-2.5`), increased icon sizes (`w-11 h-11 rounded-2xl`), and enlarged action icon touch targets (`p-2.5`).
+    - `RoutineManagerView`: Refined routine card padding to `p-5 sm:p-6 rounded-3xl`, enhanced step timeline item padding, and added subtle borders and gap hierarchy.
+    - `AdherenceView`: Refined stats cards to `p-5 sm:p-6 rounded-3xl`, polished past-days selector grid (`gap-2.5`), and enlarged log item padding (`p-3.5 sm:p-4 rounded-2xl`).
+    - `DateNavigator` & `NextUpBanner`: Polished control bar padding (`p-3 sm:p-3.5 rounded-3xl`), week day strip button touch targets, and banner breathing room.
+  - **App Layout Shell**:
+    - Expanded main content width to `max-w-xl` (576px) across `Navbar`, `main`, `BottomNav`, and `Footer` with `px-4 sm:px-6` padding, giving medicines and routines generous breathing room on tablets, foldables, and desktop viewports while preserving handheld phone comfort.
+
+---
+
+## [v1.5.1] - 2026-09-23
+
+### Fixed
+- **Add Medicine Modal Crash (Rules of Hooks Violation)**:
+  - Fixed a React hook order violation where an early return (`if (!isOpen) return null;`) was placed before a second `useEffect` hook (Escape key listener) in `AddMedicineModal.tsx`.
+  - Re-ordered all hooks to the top level unconditionally and wrapped modal elements inside `<AnimatePresence>{isOpen && ...}</AnimatePresence>` for safe rendering and smooth exit transitions.
+  - Standardized all modal dialogs (`AddMedicineModal`, `QuickRoutineModal`, `SettingsModal`, `ConfirmModal`, `WhatIsNewModal`) to use consistent, unconditional hook calls and proper Framer Motion enter/exit lifecycles.
+
+---
+
 ## [v1.5.0] - 2026-09-23
 
 ### Added

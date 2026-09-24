@@ -23,7 +23,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({
 }) => {
   return (
     <div className="fixed bottom-0 left-0 right-0 z-40 bg-white/90 dark:bg-slate-950/90 backdrop-blur-md border-t border-slate-200/80 dark:border-slate-800/80 pb-safe">
-      <div className="max-w-md mx-auto px-3 h-16 flex items-center justify-around relative">
+      <div className="max-w-xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-around relative">
         {/* Today Tab */}
         <button
           onClick={() => onTabChange('today')}
